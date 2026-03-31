@@ -29,7 +29,7 @@ interface Member {
   phone: string | null;
   status: string;
   assignedTo: { id: string; name: string } | null;
-  createdBy?: { id: string; name: string } | null;
+  createdBy: { id: string; name: string } | null;
   updatedAt: string;
 }
 
@@ -68,7 +68,14 @@ export default function DashboardPage() {
       .then(setStats);
     fetch('/api/members')
       .then((r) => r.json())
-      .then(setMembers);
+      .then((data) => {
+        setMembers(
+          data.map((m: any) => ({
+            ...m,
+            createdBy: m.createdBy ?? null,
+          }))
+        );
+      });
     fetch('/api/trainers')
       .then((r) => r.json())
       .then(setTrainers);
