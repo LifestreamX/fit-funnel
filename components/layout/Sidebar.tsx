@@ -52,16 +52,16 @@ export default function Sidebar() {
                 active
                   ? 'bg-gray-800 text-white'
                   : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-              }`}
-            >
-              <span>{link.icon}</span>
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
-    </>
-  );
+              <a
+                key={link.href}
+                href={link.href}
+                className={`flex items-center gap-3 rounded-lg px-4 py-2 text-base font-medium transition-colors cursor-pointer ${
+                  active
+                    ? 'bg-orange-100 text-orange-700'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                onClick={() => setMobileOpen(false)}
+              >
 
   return (
     <>

@@ -249,21 +249,21 @@ export default function SettingsPage() {
         <nav className='-mb-px flex space-x-8'>
           <button
             onClick={() => setActiveTab('pipeline')}
-            className={`${
+            className={`cursor-pointer $
               activeTab === 'pipeline'
                 ? 'border-orange-500 text-orange-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
           >
             Pipeline Stages
-          </button>
           <button
             onClick={() => setActiveTab('tags')}
-            className={`${
+            className={`cursor-pointer $
               activeTab === 'tags'
                 ? 'border-orange-500 text-orange-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+          >
           >
             Tags
           </button>
