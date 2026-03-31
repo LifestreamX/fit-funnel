@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  if (!session || (session.user as any).role !== 'MANAGER') {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -20,6 +20,8 @@ export async function POST(req: Request) {
     }
 
     const gymId = (session.user as any).gymId;
+    const userId = (session.user as any).id;
+    const role = (session.user as any).role;
 
     const data = members
       .filter((m: any) => m.firstName && m.lastName)
@@ -29,6 +31,8 @@ export async function POST(req: Request) {
         email: m.email ? String(m.email).trim() : null,
         phone: m.phone ? String(m.phone).trim() : null,
         gymId,
+        createdById: userId,
+        assignedToId: role === 'TRAINER' ? userId : null, // Auto-assign to trainer if they import
       }));
 
     const result = await prisma.member.createMany({ data });

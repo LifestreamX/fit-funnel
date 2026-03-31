@@ -28,6 +28,7 @@ interface Member {
   phone: string | null;
   status: string;
   assignedTo: { id: string; name: string } | null;
+  createdBy?: { id: string; name: string } | null;
   updatedAt: string;
 }
 
@@ -243,6 +244,7 @@ export default function DashboardPage() {
         <MemberTable
           members={filteredMembers}
           showTrainer
+          showCreatedBy
           onAssignTrainer={(member) => setAssignModal({ open: true, member })}
         />
 

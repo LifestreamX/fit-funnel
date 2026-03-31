@@ -16,12 +16,15 @@ export default function Sidebar() {
 
   const managerLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { href: '/prospects', label: 'Prospects', icon: '📋' },
     { href: '/import', label: 'Import', icon: '📁' },
     { href: '/trainers', label: 'Trainers', icon: '👥' },
+    { href: '/settings', label: 'Settings', icon: '⚙️' },
   ];
 
   const trainerLinks = [
     { href: '/prospects', label: 'My Prospects', icon: '📋' },
+    { href: '/import', label: 'Import', icon: '📁' },
   ];
 
   const links = role === 'MANAGER' ? managerLinks : trainerLinks;

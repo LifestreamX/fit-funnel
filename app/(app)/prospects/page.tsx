@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import AuthGuard from '@/components/layout/AuthGuard';
 import MemberTable from '@/components/ui/MemberTable';
 import OutreachModal from '@/components/ui/OutreachModal';
@@ -16,12 +17,21 @@ interface Member {
   phone: string | null;
   status: string;
   assignedTo: { id: string; name: string } | null;
+  createdBy: { id: string; name: string } | null;
   updatedAt: string;
 }
 
+interface Trainer {
+  id: string;
+  name: string;
+}
+
 export default function ProspectsPage() {
+  const { data: session } = useSession();
   const [members, setMembers] = useState<Member[]>([]);
+  const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [statusFilter, setStatusFilter] = useState('');
+  const [trainerFilter, setTrainerFilter] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [newMember, setNewMember] = useState({
     firstName: '',
@@ -45,18 +55,34 @@ export default function ProspectsPage() {
     member: null,
   });
 
+  const role = (session?.user as any)?.role;
+  const isManager = role === 'MANAGER';
+
   const fetchMembers = () => {
     fetch('/api/members')
       .then((r) => r.json())
       .then(setMembers);
   };
 
+  const fetchTrainers = () => {
+    if (isManager) {
+      fetch('/api/trainers')
+        .then((r) => r.json())
+        .then(setTrainers);
+    }
+  };
+
   useEffect(() => {
     fetchMembers();
-  }, []);
+    fetchTrainers();
+  }, [isManager]);
 
   const filteredMembers = members.filter((m) => {
     if (statusFilter && m.status !== statusFilter) return false;
+    if (trainerFilter) {
+      if (trainerFilter === 'unassigned' && m.assignedTo !== null) return false;
+      if (trainerFilter !== 'unassigned' && m.assignedTo?.id !== trainerFilter) return false;
+    }
     return true;
   });
 
@@ -82,10 +108,12 @@ export default function ProspectsPage() {
   };
 
   return (
-    <AuthGuard requireRole='TRAINER'>
+    <AuthGuard>
       <div className='space-y-6'>
         <div className='flex items-center justify-between'>
-          <h1 className='text-2xl font-bold text-gray-900'>My Prospects</h1>
+          <h1 className='text-2xl font-bold text-gray-900'>
+            {isManager ? 'All Prospects' : 'My Prospects'}
+          </h1>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
             className='cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
@@ -158,8 +186,8 @@ export default function ProspectsPage() {
           </div>
         )}
 
-        {/* Status Filter */}
-        <div>
+        {/* Filters */}
+        <div className='flex gap-4'>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -172,11 +200,28 @@ export default function ProspectsPage() {
               </option>
             ))}
           </select>
+
+          {isManager && (
+            <select
+              value={trainerFilter}
+              onChange={(e) => setTrainerFilter(e.target.value)}
+              className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+            >
+              <option value=''>All Trainers</option>
+              <option value='unassigned'>Unassigned</option>
+              {trainers.map((trainer) => (
+                <option key={trainer.id} value={trainer.id}>
+                  {trainer.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         {/* Member Table */}
         <MemberTable
           members={filteredMembers}
+          showCreatedBy={isManager}
           onEdit={(member) => setEditModal({ open: true, member })}
           onLogOutreach={(member) => setOutreachModal({ open: true, member })}
         />

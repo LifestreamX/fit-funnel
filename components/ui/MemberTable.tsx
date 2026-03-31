@@ -10,12 +10,14 @@ interface Member {
   phone: string | null;
   status: string;
   assignedTo: { id: string; name: string } | null;
+  createdBy?: { id: string; name: string } | null;
   updatedAt: string;
 }
 
 interface MemberTableProps {
   members: Member[];
   showTrainer?: boolean;
+  showCreatedBy?: boolean;
   onAssignTrainer?: (member: Member) => void;
   onEdit?: (member: Member) => void;
   onLogOutreach?: (member: Member) => void;
@@ -24,6 +26,7 @@ interface MemberTableProps {
 export default function MemberTable({
   members,
   showTrainer = false,
+  showCreatedBy = false,
   onAssignTrainer,
   onEdit,
   onLogOutreach,
@@ -58,6 +61,11 @@ export default function MemberTable({
                 Trainer
               </th>
             )}
+            {showCreatedBy && (
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500'>
+                Added By
+              </th>
+            )}
             <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500'>
               Last Updated
             </th>
@@ -90,6 +98,15 @@ export default function MemberTable({
                     member.assignedTo.name
                   ) : (
                     <span className='text-gray-400 italic'>Unassigned</span>
+                  )}
+                </td>
+              )}
+              {showCreatedBy && (
+                <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
+                  {member.createdBy ? (
+                    member.createdBy.name
+                  ) : (
+                    <span className='text-gray-400 italic'>—</span>
                   )}
                 </td>
               )}

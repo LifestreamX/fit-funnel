@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
                 Check your email
               </h2>
               <p className='mt-2 text-sm text-gray-600'>
-                We've sent a password reset link to <strong>{email}</strong>.
+                We&apos;ve sent a password reset link to <strong>{email}</strong>.
                 The link will expire in 1 hour.
               </p>
               <Link
@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
                 placeholder='you@example.com'
               />
               <p className='mt-2 text-xs text-gray-500'>
-                Enter the email address associated with your account and we'll
+                Enter the email address associated with your account and we&apos;ll
                 send you a link to reset your password.
               </p>
             </div>

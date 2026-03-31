@@ -107,7 +107,7 @@ export default function ImportPage() {
   };
 
   return (
-    <AuthGuard requireRole='MANAGER'>
+    <AuthGuard>
       <div className='space-y-6'>
         <div className='flex items-center justify-between'>
           <h1 className='text-2xl font-bold text-gray-900'>Import Members</h1>

@@ -49,12 +49,12 @@ export default async function Home() {
         <div className='py-20 text-center md:py-28'>
           <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
             Turn Gym Prospects Into
-            <span className='block text-orange-600'>Loyal Members</span>
+            <span className='block text-orange-600'>Personal Training Clients</span>
           </h1>
           <p className='mx-auto mt-6 max-w-2xl text-lg text-gray-600'>
-            The complete prospect management system for gyms. Track leads,
-            assign trainers, log outreach, and convert more prospects into
-            paying members.
+            The complete prospect management system for personal trainers and
+            fitness managers. Track leads, assign trainers, log outreach, and
+            convert more prospects into paying PT clients.
           </p>
           <div className='mt-10 flex justify-center gap-4'>
             <Link
@@ -75,7 +75,7 @@ export default async function Home() {
         {/* Features Grid */}
         <div className='pb-20'>
           <h2 className='mb-12 text-center text-3xl font-bold text-gray-900'>
-            Everything You Need to Grow Your Gym
+            Everything You Need to Build Your PT Business
           </h2>
           <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
             {/* Feature 1 */}
@@ -99,8 +99,8 @@ export default async function Home() {
                 Prospect Tracking
               </h3>
               <p className='text-gray-600'>
-                Centralize all your leads in one place. Import from CSV or add
-                manually. Never lose track of a prospect again.
+                Centralize all your PT leads in one place. Import from CSV or
+                add manually. Never lose track of a potential client again.
               </p>
             </div>
 
@@ -125,8 +125,8 @@ export default async function Home() {
                 Trainer Assignment
               </h3>
               <p className='text-gray-600'>
-                Assign prospects to trainers instantly. Each trainer gets a
-                personalized dashboard with their assigned leads.
+                Assign prospects to personal trainers instantly. Each trainer
+                gets a personalized dashboard with their assigned leads.
               </p>
             </div>
 
@@ -177,8 +177,8 @@ export default async function Home() {
                 Real-Time Analytics
               </h3>
               <p className='text-gray-600'>
-                See conversion rates, contact stats, and trainer performance at
-                a glance. Make data-driven decisions.
+                See PT conversion rates, contact stats, and trainer performance
+                at a glance. Make data-driven decisions for your PT business.
               </p>
             </div>
 
@@ -239,11 +239,12 @@ export default async function Home() {
         {/* CTA Section */}
         <div className='mb-20 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 p-12 text-center shadow-xl'>
           <h2 className='text-3xl font-bold text-white sm:text-4xl'>
-            Ready to Grow Your Gym?
+            Ready to Grow Your PT Business?
           </h2>
           <p className='mx-auto mt-4 max-w-2xl text-lg text-orange-100'>
-            Join gyms that are converting more prospects into members with
-            FitFunnel. Start tracking, managing, and growing today.
+            Join personal trainers and fitness managers converting more
+            prospects into paying PT clients with FitFunnel. Start tracking,
+            managing, and growing today.
           </p>
           <div className='mt-8'>
             <Link

@@ -21,6 +21,7 @@ export async function GET() {
     where,
     include: {
       assignedTo: { select: { id: true, name: true, email: true } },
+      createdBy: { select: { id: true, name: true, email: true } },
     },
     orderBy: { updatedAt: 'desc' },
   });
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
         phone,
         gymId,
         assignedToId: role === 'TRAINER' ? userId : null,
+        createdById: userId,
       },
     });
 
