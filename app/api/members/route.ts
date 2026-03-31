@@ -21,7 +21,7 @@ export async function GET() {
     where,
     include: {
       assignedTo: { select: { id: true, name: true, email: true } },
-      createdBy: { select: { id: true, name: true, email: true } },
+      // createdBy is not a valid include property for MemberInclude<DefaultArgs>
     },
     orderBy: { updatedAt: 'desc' },
   });
