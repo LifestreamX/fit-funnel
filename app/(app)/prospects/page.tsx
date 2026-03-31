@@ -62,7 +62,15 @@ export default function ProspectsPage() {
   const fetchMembers = () => {
     fetch('/api/members')
       .then((r) => r.json())
-      .then(setMembers);
+      .then((data) => {
+        // Ensure createdBy is always present (null if missing)
+        setMembers(
+          data.map((m: any) => ({
+            ...m,
+            createdBy: m.createdBy ?? null,
+          }))
+        );
+      });
   };
 
   const fetchTrainers = () => {
