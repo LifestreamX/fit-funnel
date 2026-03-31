@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model Gym {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  users     User[]
+  members   Member[]
+}
+
+model User {
+  id                 String        @id @default(cuid())
+  name               String
+  email              String        @unique
+  password           String?
+  role               Role          @default(TRAINER)
+  gymId              String
+  gym                Gym           @relation(fields: [gymId], references: [id])
+  members            Member[]
+  logs               OutreachLog[]
+  inviteToken        String?       @unique
+  inviteExpires      DateTime?
+  resetToken         String?       @unique
+  resetTokenExpires  DateTime?
+  createdAt          DateTime      @default(now())
+}
+
+enum Role {
+  MANAGER
+  TRAINER
+}
+
+model Member {
+  id           String        @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  status       MemberStatus  @default(NOT_CONTACTED)
+  gymId        String
+  gym          Gym           @relation(fields: [gymId], references: [id])
+  assignedToId String?
+  assignedTo   User?         @relation(fields: [assignedToId], references: [id])
+  logs         OutreachLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+enum MemberStatus {
+  NOT_CONTACTED
+  CONTACTED
+  NO_ANSWER
+  NOT_INTERESTED
+  ORIENTATION_BOOKED
+  CONVERTED
+}
+
+model OutreachLog {
+  id        String       @id @default(cuid())
+  memberId  String
+  member    Member       @relation(fields: [memberId], references: [id])
+  trainerId String
+  trainer   User         @relation(fields: [trainerId], references: [id])
+  outcome   MemberStatus
+  notes     String?
+  createdAt DateTime     @default(now())
+}
