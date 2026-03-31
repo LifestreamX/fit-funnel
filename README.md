@@ -34,6 +34,8 @@ FitFunnel helps personal trainers and fitness managers efficiently manage prospe
 
 - **Responsive Design**: Mobile-first, works on all devices
 - **Gym-Themed UI**: Orange and red color scheme with fitness branding
+- **Unified Dropdowns**: All dropdowns use a custom Select component styled to match the app's theme
+- **Themed Scrollbars**: Dropdown and overflow scrollbars use the app's orange accent color for a consistent look
 - **Smart Forms**: Auto-formatting phone inputs, email validation
 - **Instant Feedback**: Toast notifications, loading states, confirmation modals
 
