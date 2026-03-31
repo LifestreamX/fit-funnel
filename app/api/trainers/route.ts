@@ -17,7 +17,6 @@ export async function GET() {
       id: true,
       name: true,
       email: true,
-      password: false,
       inviteToken: true,
       inviteExpires: true,
       createdAt: true,
