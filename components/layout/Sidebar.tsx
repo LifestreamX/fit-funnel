@@ -41,6 +41,7 @@ export default function Sidebar() {
       </div>
 
       <nav className='mt-6 flex-1 space-y-1 px-3'>
+
         {links.map((link) => {
           const active = pathname === link.href;
           return (
@@ -48,20 +49,20 @@ export default function Sidebar() {
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
                 active
                   ? 'bg-gray-800 text-white'
                   : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-              <a
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-3 rounded-lg px-4 py-2 text-base font-medium transition-colors cursor-pointer ${
-                  active
-                    ? 'bg-orange-100 text-orange-700'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-                onClick={() => setMobileOpen(false)}
-              >
+              }`}
+            >
+              <span className='text-lg'>{link.icon}</span>
+              {link.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </>
+  );
 
   return (
     <>

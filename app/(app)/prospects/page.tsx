@@ -208,7 +208,7 @@ export default function ProspectsPage() {
                 label,
               })),
             ]}
-            className='min-w-[160px]'
+            className='min-w-40'
           />
           {isManager && (
             <Select
@@ -222,7 +222,7 @@ export default function ProspectsPage() {
                   label: trainer.name,
                 })),
               ]}
-              className='min-w-[160px]'
+              className='min-w-40'
             />
           )}
         </div>

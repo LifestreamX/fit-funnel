@@ -73,7 +73,7 @@ export default function DashboardPage() {
           data.map((m: any) => ({
             ...m,
             createdBy: m.createdBy ?? null,
-          }))
+          })),
         );
       });
     fetch('/api/trainers')
@@ -231,7 +231,7 @@ export default function DashboardPage() {
                 label,
               })),
             ]}
-            className='min-w-[160px]'
+            className='min-w-40'
           />
           <Select
             value={trainerFilter}
@@ -240,7 +240,7 @@ export default function DashboardPage() {
               { value: '', label: 'All Trainers' },
               ...trainers.map((t) => ({ value: t.id, label: t.name })),
             ]}
-            className='min-w-[160px]'
+            className='min-w-40'
           />
         </div>
 

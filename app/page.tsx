@@ -17,7 +17,7 @@ export default async function Home() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50'>
+    <div className='min-h-screen bg-linear-to-br from-orange-50 via-white to-red-50'>
       {/* Navigation */}
       <nav className='border-b border-gray-200 bg-white/80 backdrop-blur-sm'>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
@@ -239,7 +239,7 @@ export default async function Home() {
         </div>
 
         {/* CTA Section */}
-        <div className='mb-20 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 p-12 text-center shadow-xl'>
+        <div className='mb-20 rounded-2xl bg-linear-to-r from-orange-600 to-red-600 p-12 text-center shadow-xl'>
           <h2 className='text-3xl font-bold text-white sm:text-4xl'>
             Ready to Grow Your PT Business?
           </h2>
