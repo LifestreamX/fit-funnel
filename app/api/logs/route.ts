@@ -10,7 +10,6 @@ export async function POST(req: Request) {
   }
 
   try {
-
     const { memberId, outcome, notes } = await req.json();
     if (!memberId) {
       return NextResponse.json(

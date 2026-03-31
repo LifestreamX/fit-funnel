@@ -11,35 +11,35 @@ export async function GET() {
 
   const gymId = (session.user as any).gymId;
 
-    const trainers = await prisma.user.findMany({
-      where: { gymId, role: 'TRAINER' },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        inviteToken: true,
-        inviteExpires: true,
-        createdAt: true,
-        assignedMembers: {
-          select: { id: true },
-        },
+  const trainers = await prisma.user.findMany({
+    where: { gymId, role: 'TRAINER' },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      inviteToken: true,
+      inviteExpires: true,
+      createdAt: true,
+      assignedMembers: {
+        select: { id: true },
       },
-    });
+    },
+  });
 
-    const trainersWithStats = trainers.map((trainer) => {
-      const members = trainer.assignedMembers;
-      return {
-        id: trainer.id,
-        name: trainer.name,
-        email: trainer.email,
-        isPending: !!trainer.inviteToken,
-        createdAt: trainer.createdAt,
-        stats: {
-          assigned: members.length,
-          // contacted/booked counts require more info, not available here
-        },
-      };
-    });
+  const trainersWithStats = trainers.map((trainer) => {
+    const members = trainer.assignedMembers;
+    return {
+      id: trainer.id,
+      name: trainer.name,
+      email: trainer.email,
+      isPending: !!trainer.inviteToken,
+      createdAt: trainer.createdAt,
+      stats: {
+        assigned: members.length,
+        // contacted/booked counts require more info, not available here
+      },
+    };
+  });
 
-    return NextResponse.json(trainersWithStats);
+  return NextResponse.json(trainersWithStats);
 }
