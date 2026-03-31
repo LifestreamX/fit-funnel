@@ -28,7 +28,7 @@ export async function DELETE(
     const trainer = await prisma.user.findFirst({
       where: { id, gymId, role: 'TRAINER' },
       include: {
-        members: true,
+        assignedMembers: true,
       },
     });
 
@@ -40,7 +40,7 @@ export async function DELETE(
     }
 
     // Unassign all members from this trainer before deleting
-    if (trainer.members.length > 0) {
+    if (trainer.assignedMembers.length > 0) {
       await prisma.member.updateMany({
         where: { assignedToId: id },
         data: { assignedToId: null },

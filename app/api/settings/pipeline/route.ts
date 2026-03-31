@@ -85,7 +85,12 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error creating pipeline stage:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to create pipeline stage' },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to create pipeline stage',
+      },
       { status: 500 },
     );
   }
@@ -112,16 +117,23 @@ export async function PUT(req: Request) {
 
     // Update all stages in a transaction
     await prisma.$transaction(
-      stages.map((stage: { id: string; name: string; color: string; order: number; isDefault: boolean }) =>
-        prisma.pipelineStage.update({
-          where: { id: stage.id },
-          data: {
-            name: stage.name,
-            color: stage.color,
-            order: stage.order,
-            isDefault: stage.isDefault,
-          },
-        }),
+      stages.map(
+        (stage: {
+          id: string;
+          name: string;
+          color: string;
+          order: number;
+          isDefault: boolean;
+        }) =>
+          prisma.pipelineStage.update({
+            where: { id: stage.id },
+            data: {
+              name: stage.name,
+              color: stage.color,
+              order: stage.order,
+              isDefault: stage.isDefault,
+            },
+          }),
       ),
     );
 
@@ -129,7 +141,12 @@ export async function PUT(req: Request) {
   } catch (error) {
     console.error('Error updating pipeline stages:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to update pipeline stages' },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to update pipeline stages',
+      },
       { status: 500 },
     );
   }
@@ -179,7 +196,12 @@ export async function DELETE(req: Request) {
   } catch (error) {
     console.error('Error deleting pipeline stage:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to delete pipeline stage' },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to delete pipeline stage',
+      },
       { status: 500 },
     );
   }

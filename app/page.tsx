@@ -49,7 +49,9 @@ export default async function Home() {
         <div className='py-20 text-center md:py-28'>
           <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
             Turn Gym Prospects Into
-            <span className='block text-orange-600'>Personal Training Clients</span>
+            <span className='block text-orange-600'>
+              Personal Training Clients
+            </span>
           </h1>
           <p className='mx-auto mt-6 max-w-2xl text-lg text-gray-600'>
             The complete prospect management system for personal trainers and

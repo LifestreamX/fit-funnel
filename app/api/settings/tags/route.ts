@@ -74,7 +74,12 @@ export async function POST(req: Request) {
     return NextResponse.json(tag);
   } catch (error) {
     console.error('Error creating tag:', error);
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      error.code === 'P2002'
+    ) {
       return NextResponse.json(
         { error: 'Tag name already exists' },
         { status: 400 },

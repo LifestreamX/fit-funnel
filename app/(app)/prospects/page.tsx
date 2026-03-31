@@ -81,7 +81,8 @@ export default function ProspectsPage() {
     if (statusFilter && m.status !== statusFilter) return false;
     if (trainerFilter) {
       if (trainerFilter === 'unassigned' && m.assignedTo !== null) return false;
-      if (trainerFilter !== 'unassigned' && m.assignedTo?.id !== trainerFilter) return false;
+      if (trainerFilter !== 'unassigned' && m.assignedTo?.id !== trainerFilter)
+        return false;
     }
     return true;
   });
