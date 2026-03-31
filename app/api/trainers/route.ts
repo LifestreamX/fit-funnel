@@ -26,7 +26,18 @@ export async function GET() {
     },
   });
 
-  const trainersWithStats = trainers.map((trainer) => {
+  // Add the manager (current user) to the trainers list for assignment
+  const manager = {
+    id: (session.user as any).id,
+    name: (session.user as any).name || 'You (Manager)',
+    email: (session.user as any).email,
+    inviteToken: null,
+    inviteExpires: null,
+    createdAt: null,
+    assignedMembers: [],
+  };
+
+  const trainersWithStats = [manager, ...trainers].map((trainer) => {
     const members = trainer.assignedMembers;
     return {
       id: trainer.id,
