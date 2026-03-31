@@ -378,7 +378,7 @@ export default function SettingsPage() {
                         value: color.value,
                         label: color.name,
                       }))}
-                      className='min-w-30'
+                      className='min-w-[120px]'
                     />
                     <button
                       onClick={() => deleteStage(stage.id)}

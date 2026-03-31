@@ -61,19 +61,19 @@ body {
 
 /* Global affordances for interactive elements */
 button,
-[role="button"],
+[role='button'],
 a[href],
-input[type="button"],
-input[type="submit"] {
+input[type='button'],
+input[type='submit'] {
   cursor: pointer;
 }
 
 /* Subtle hover/focus affordance for clickable elements */
 button:hover,
-[role="button"]:hover,
+[role='button']:hover,
 a[href]:hover,
 button:focus,
-[role="button"]:focus,
+[role='button']:focus,
 a[href]:focus {
   opacity: 0.95;
   transition: opacity 120ms ease;

@@ -41,7 +41,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-linear-to-br from-orange-50 to-red-50 px-4'>
+    <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 px-4'>
       <div className='w-full max-w-md'>
         <div className='text-center'>
           <h1 className='text-3xl font-bold text-gray-900'>💪 FitFunnel</h1>

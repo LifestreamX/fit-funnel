@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className='flex min-h-screen items-center justify-center bg-linear-to-br from-orange-50 to-red-50 px-4'>
+      <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 px-4'>
         <div className='w-full max-w-md'>
           <div className='rounded-2xl bg-white p-8 shadow-xl'>
             <div className='text-center'>
