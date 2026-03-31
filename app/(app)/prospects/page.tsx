@@ -8,6 +8,7 @@ import OutreachModal from '@/components/ui/OutreachModal';
 import EditMemberModal from '@/components/ui/EditMemberModal';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { statusLabels } from '@/lib/utils';
+import Select from '@/components/ui/Select';
 
 interface Member {
   id: string;
