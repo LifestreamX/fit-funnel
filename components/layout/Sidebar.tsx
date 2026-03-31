@@ -41,7 +41,6 @@ export default function Sidebar() {
       </div>
 
       <nav className='mt-6 flex-1 space-y-1 px-3'>
-
         {links.map((link) => {
           const active = pathname === link.href;
           return (
