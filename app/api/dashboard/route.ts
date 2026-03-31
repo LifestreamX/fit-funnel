@@ -11,14 +11,17 @@ export async function GET() {
 
   const gymId = (session.user as any).gymId;
 
-  const members = await prisma.member.findMany({ where: { gymId }, select: { stageId: true } });
+  const members = await prisma.member.findMany({
+    where: { gymId },
+    select: { stage: { select: { id: true } } },
+  });
 
   // You may want to map stageId to human-readable status here, or count by stageId
   const total = members.length;
   // Example: group by stageId (status)
   const stageCounts: Record<string, number> = {};
   for (const m of members) {
-    const sid = m.stageId;
+    const sid = m.stage?.id;
     if (sid) {
       stageCounts[sid] = (stageCounts[sid] || 0) + 1;
     }
