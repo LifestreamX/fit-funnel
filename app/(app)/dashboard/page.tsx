@@ -9,6 +9,7 @@ import MemberTable from '@/components/ui/MemberTable';
 import TrainerAssignModal from '@/components/ui/TrainerAssignModal';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { statusLabels } from '@/lib/utils';
+import Select from '@/components/ui/Select';
 
 interface Stats {
   total: number;
@@ -213,31 +214,27 @@ export default function DashboardPage() {
 
         {/* Filters */}
         <div className='flex gap-4'>
-          <select
+          <Select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
-          >
-            <option value=''>All Statuses</option>
-            {Object.entries(statusLabels).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-
-          <select
+            onChange={setStatusFilter}
+            options={[
+              { value: '', label: 'All Statuses' },
+              ...Object.entries(statusLabels).map(([key, label]) => ({
+                value: key,
+                label,
+              })),
+            ]}
+            className='min-w-[160px]'
+          />
+          <Select
             value={trainerFilter}
-            onChange={(e) => setTrainerFilter(e.target.value)}
-            className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
-          >
-            <option value=''>All Trainers</option>
-            {trainers.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </select>
+            onChange={setTrainerFilter}
+            options={[
+              { value: '', label: 'All Trainers' },
+              ...trainers.map((t) => ({ value: t.id, label: t.name })),
+            ]}
+            className='min-w-[160px]'
+          />
         </div>
 
         {/* Member Table */}

@@ -88,18 +88,15 @@ export default function TrainerAssignModal({
             <label className='block text-sm font-medium text-gray-700'>
               Trainer
             </label>
-            <select
-              value={selectedTrainerId}
-              onChange={(e) => setSelectedTrainerId(e.target.value)}
-              className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
-            >
-              <option value=''>Unassigned</option>
-              {trainers.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
+            <Select
+              value={selectedTrainerId || ''}
+              onChange={setSelectedTrainerId}
+              options={[
+                { value: '', label: 'Unassigned' },
+                ...trainers.map((t) => ({ value: t.id, label: t.name })),
+              ]}
+              className='mt-1 w-full'
+            />
           </div>
 
           <div className='flex justify-end gap-3'>

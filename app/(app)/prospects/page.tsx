@@ -189,33 +189,32 @@ export default function ProspectsPage() {
 
         {/* Filters */}
         <div className='flex gap-4'>
-          <select
+          <Select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
-          >
-            <option value=''>All Statuses</option>
-            {Object.entries(statusLabels).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-
+            onChange={setStatusFilter}
+            options={[
+              { value: '', label: 'All Statuses' },
+              ...Object.entries(statusLabels).map(([key, label]) => ({
+                value: key,
+                label,
+              })),
+            ]}
+            className='min-w-[160px]'
+          />
           {isManager && (
-            <select
+            <Select
               value={trainerFilter}
-              onChange={(e) => setTrainerFilter(e.target.value)}
-              className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
-            >
-              <option value=''>All Trainers</option>
-              <option value='unassigned'>Unassigned</option>
-              {trainers.map((trainer) => (
-                <option key={trainer.id} value={trainer.id}>
-                  {trainer.name}
-                </option>
-              ))}
-            </select>
+              onChange={setTrainerFilter}
+              options={[
+                { value: '', label: 'All Trainers' },
+                { value: 'unassigned', label: 'Unassigned' },
+                ...trainers.map((trainer) => ({
+                  value: trainer.id,
+                  label: trainer.name,
+                })),
+              ]}
+              className='min-w-[160px]'
+            />
           )}
         </div>
 

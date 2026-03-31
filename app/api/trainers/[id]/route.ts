@@ -15,7 +15,7 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
   const user = session?.user as SessionUser | undefined;
-  
+
   if (!session || user?.role !== 'MANAGER') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -33,10 +33,7 @@ export async function DELETE(
     });
 
     if (!trainer) {
-      return NextResponse.json(
-        { error: 'Trainer not found' },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Trainer not found' }, { status: 404 });
     }
 
     // Unassign all members from this trainer before deleting

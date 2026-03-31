@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Select from '@/components/ui/Select';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -305,17 +306,15 @@ export default function SettingsPage() {
                 <label className='block text-sm font-medium text-gray-700 mb-2'>
                   Color
                 </label>
-                <select
+                <Select
                   value={newStageColor}
-                  onChange={(e) => setNewStageColor(e.target.value)}
-                  className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent'
-                >
-                  {colorOptions.map((color) => (
-                    <option key={color.value} value={color.value}>
-                      {color.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setNewStageColor}
+                  options={colorOptions.map((color) => ({
+                    value: color.value,
+                    label: color.name,
+                  }))}
+                  className='w-full'
+                />
               </div>
               <button
                 onClick={addStage}
@@ -372,19 +371,15 @@ export default function SettingsPage() {
                     )}
                   </div>
                   <div className='flex items-center gap-3'>
-                    <select
+                    <Select
                       value={stage.color}
-                      onChange={(e) =>
-                        updateStage(stage.id, { color: e.target.value })
-                      }
-                      className='px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500'
-                    >
-                      {colorOptions.map((color) => (
-                        <option key={color.value} value={color.value}>
-                          {color.name}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => updateStage(stage.id, { color: val })}
+                      options={colorOptions.map((color) => ({
+                        value: color.value,
+                        label: color.name,
+                      }))}
+                      className='min-w-[120px]'
+                    />
                     <button
                       onClick={() => deleteStage(stage.id)}
                       className='px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium'
@@ -428,17 +423,15 @@ export default function SettingsPage() {
                 <label className='block text-sm font-medium text-gray-700 mb-2'>
                   Color
                 </label>
-                <select
+                <Select
                   value={newTagColor}
-                  onChange={(e) => setNewTagColor(e.target.value)}
-                  className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent'
-                >
-                  {colorOptions.map((color) => (
-                    <option key={color.value} value={color.value}>
-                      {color.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setNewTagColor}
+                  options={colorOptions.map((color) => ({
+                    value: color.value,
+                    label: color.name,
+                  }))}
+                  className='w-full'
+                />
               </div>
               <button
                 onClick={addTag}

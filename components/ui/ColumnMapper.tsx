@@ -33,18 +33,18 @@ export default function ColumnMapper({
               {field.label}
               {field.required && <span className='text-red-500'> *</span>}
             </label>
-            <select
+            <Select
               value={mapping[field.key] || ''}
-              onChange={(e) => onMappingChange(field.key, e.target.value)}
-              className='flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
-            >
-              <option value=''>— Select column —</option>
-              {csvHeaders.map((header) => (
-                <option key={header} value={header}>
-                  {header}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => onMappingChange(field.key, val)}
+              options={[
+                { value: '', label: '— Select column —' },
+                ...csvHeaders.map((header) => ({
+                  value: header,
+                  label: header,
+                })),
+              ]}
+              className='flex-1'
+            />
           </div>
         ))}
       </div>

@@ -88,7 +88,7 @@ export default function Select({
 
       {isOpen && (
         <div className='absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-fadeIn'>
-          <div className='max-h-60 overflow-y-auto py-1'>
+          <div className='max-h-60 overflow-y-auto custom-scrollbar py-1'>
             {options.map((option) => (
               <button
                 key={option.value}
