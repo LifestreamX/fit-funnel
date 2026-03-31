@@ -58,7 +58,6 @@ export async function POST(req: Request) {
         phone,
         gymId,
         assignedToId: role === 'TRAINER' ? userId : null,
-        createdById: userId,
       },
     });
 
