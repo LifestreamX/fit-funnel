@@ -58,3 +58,33 @@ body {
     -apple-system,
     sans-serif;
 }
+
+/* Global affordances for interactive elements */
+button,
+[role="button"],
+a[href],
+input[type="button"],
+input[type="submit"] {
+  cursor: pointer;
+}
+
+/* Subtle hover/focus affordance for clickable elements */
+button:hover,
+[role="button"]:hover,
+a[href]:hover,
+button:focus,
+[role="button"]:focus,
+a[href]:focus {
+  opacity: 0.95;
+  transition: opacity 120ms ease;
+}
+
+/* Optional utility: add .clickable class for custom elements */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  opacity: 0.95;
+  transition: opacity 120ms ease;
+}
