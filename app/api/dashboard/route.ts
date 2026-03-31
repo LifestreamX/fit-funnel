@@ -13,30 +13,21 @@ export async function GET() {
 
   const members = await prisma.member.findMany({
     where: { gymId },
-    select: { status: true },
+    select: { stageId: true },
   });
 
+  // You may want to map stageId to human-readable status here, or count by stageId
   const total = members.length;
-  const contacted = members.filter((m) => m.status === 'CONTACTED').length;
-  const noAnswer = members.filter((m) => m.status === 'NO_ANSWER').length;
-  const notInterested = members.filter(
-    (m) => m.status === 'NOT_INTERESTED',
-  ).length;
-  const booked = members.filter(
-    (m) => m.status === 'ORIENTATION_BOOKED',
-  ).length;
-  const converted = members.filter((m) => m.status === 'CONVERTED').length;
-  const notContacted = members.filter(
-    (m) => m.status === 'NOT_CONTACTED',
-  ).length;
+  // Example: group by stageId (status)
+  const stageCounts: Record<string, number> = {};
+  for (const m of members) {
+    if (m.stageId) {
+      stageCounts[m.stageId] = (stageCounts[m.stageId] || 0) + 1;
+    }
+  }
 
   return NextResponse.json({
     total,
-    contacted,
-    noAnswer,
-    notInterested,
-    booked,
-    converted,
-    notContacted,
+    stageCounts,
   });
 }

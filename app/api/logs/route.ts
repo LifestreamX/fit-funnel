@@ -10,11 +10,11 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { memberId, outcome, notes } = await req.json();
 
-    if (!memberId || !outcome) {
+    const { memberId, outcome, notes } = await req.json();
+    if (!memberId) {
       return NextResponse.json(
-        { error: 'Member ID and outcome are required' },
+        { error: 'Member ID is required' },
         { status: 400 },
       );
     }
@@ -35,14 +35,10 @@ export async function POST(req: Request) {
         data: {
           memberId,
           trainerId,
-          outcome,
           notes: notes || null,
         },
       }),
-      prisma.member.update({
-        where: { id: memberId },
-        data: { status: outcome },
-      }),
+      // Optionally update member's stageId here if outcome maps to a stage
     ]);
 
     return NextResponse.json(log);
