@@ -68,7 +68,7 @@ export default function ProspectsPage() {
           data.map((m: any) => ({
             ...m,
             createdBy: m.createdBy ?? null,
-          }))
+          })),
         );
       });
   };

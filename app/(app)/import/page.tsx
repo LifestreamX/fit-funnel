@@ -35,37 +35,73 @@ export default function ImportPage() {
 
         // Super Intelligent Auto-mapping
         const autoMapping: Record<string, string> = {};
-        
+
         const findBestMatch = (field: string, possibleTerms: string[]) => {
           // 1. Check headers first
           for (const h of headers) {
             const lower = h.toLowerCase().trim();
-            if (possibleTerms.some(term => lower === term || lower.includes(term))) {
+            if (
+              possibleTerms.some(
+                (term) => lower === term || lower.includes(term),
+              )
+            ) {
               return h;
             }
           }
-          
+
           // 2. Data-driven detection (check first 10 rows)
           if (field === 'email' || field === 'phone') {
             for (const h of headers) {
-              const sample = data.slice(0, 10).map(row => row[h]);
-              if (field === 'email' && sample.some(val => val?.includes('@') && val?.includes('.'))) return h;
-              if (field === 'phone' && sample.some(val => val?.replace(/[^0-9]/g, '').length >= 10)) return h;
+              const sample = data.slice(0, 10).map((row) => row[h]);
+              if (
+                field === 'email' &&
+                sample.some((val) => val?.includes('@') && val?.includes('.'))
+              )
+                return h;
+              if (
+                field === 'phone' &&
+                sample.some((val) => val?.replace(/[^0-9]/g, '').length >= 10)
+              )
+                return h;
             }
           }
           return '';
         };
 
-        const firstNameMatch = findBestMatch('firstName', ['first name', 'fname', 'first', 'given name', 'forename']);
+        const firstNameMatch = findBestMatch('firstName', [
+          'first name',
+          'fname',
+          'first',
+          'given name',
+          'forename',
+        ]);
         if (firstNameMatch) autoMapping.firstName = firstNameMatch;
 
-        const lastNameMatch = findBestMatch('lastName', ['last name', 'lname', 'last', 'surname', 'family name']);
+        const lastNameMatch = findBestMatch('lastName', [
+          'last name',
+          'lname',
+          'last',
+          'surname',
+          'family name',
+        ]);
         if (lastNameMatch) autoMapping.lastName = lastNameMatch;
 
-        const emailMatch = findBestMatch('email', ['email', 'e-mail', 'mail', 'address']);
+        const emailMatch = findBestMatch('email', [
+          'email',
+          'e-mail',
+          'mail',
+          'address',
+        ]);
         if (emailMatch) autoMapping.email = emailMatch;
 
-        const phoneMatch = findBestMatch('phone', ['phone', 'mobile', 'cell', 'tel', 'contact', 'number']);
+        const phoneMatch = findBestMatch('phone', [
+          'phone',
+          'mobile',
+          'cell',
+          'tel',
+          'contact',
+          'number',
+        ]);
         if (phoneMatch) autoMapping.phone = phoneMatch;
 
         setMapping(autoMapping);
