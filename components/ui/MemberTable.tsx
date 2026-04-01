@@ -13,6 +13,7 @@ interface Member {
   createdBy: { id: string; name: string } | null;
   updatedAt: string;
   tags?: { tag: { id: string; name: string; color: string } }[];
+  logs?: { notes?: string | null; createdAt?: string | null; trainer?: { id: string; name: string } | null }[];
 }
 
 interface MemberTableProps {
@@ -69,7 +70,7 @@ export default function MemberTable({
                 Added By
               </th>
             )}
-            <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500'>
+            <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 hidden md:table-cell'>
               Last Updated
             </th>
             <th className='px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500'>
@@ -83,26 +84,37 @@ export default function MemberTable({
               key={member.id}
               className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
             >
-              <td className='whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900'>
-                {member.firstName} {member.lastName}
-                <div className='mt-2 flex flex-wrap gap-2'>
-                  {member.tags &&
-                    member.tags.length > 0 &&
-                    member.tags.map((mt) => (
-                      <span
-                        key={mt.tag.id}
-                        className='inline-flex items-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white'
-                        style={{ background: mt.tag.color }}
-                      >
-                        {mt.tag.name}
-                      </span>
-                    ))}
+              <td className='whitespace-normal px-6 py-4 text-sm font-medium text-gray-900'>
+                <div className='flex flex-col'>
+                  <div className='font-medium'>
+                    {member.firstName} {member.lastName}
+                  </div>
+
+                  {member.logs && member.logs.length > 0 && member.logs[0].notes && (
+                    <div className='mt-1 text-xs text-gray-500 max-w-[18rem] truncate'>
+                      📝 {member.logs[0].notes}
+                    </div>
+                  )}
+
+                  <div className='mt-2 flex flex-wrap gap-2'>
+                    {member.tags &&
+                      member.tags.length > 0 &&
+                      member.tags.map((mt) => (
+                        <span
+                          key={mt.tag.id}
+                          className='inline-flex items-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white'
+                          style={{ background: mt.tag.color }}
+                        >
+                          {mt.tag.name}
+                        </span>
+                      ))}
+                  </div>
                 </div>
               </td>
-              <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
+              <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500 max-w-[10rem] truncate'>
                 {member.phone || '—'}
               </td>
-              <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
+              <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500 max-w-[12rem] truncate'>
                 {member.email || '—'}
               </td>
               <td className='whitespace-nowrap px-6 py-4'>
@@ -126,7 +138,7 @@ export default function MemberTable({
                   )}
                 </td>
               )}
-              <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
+              <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500 hidden md:table-cell'>
                 {new Date(member.updatedAt).toLocaleDateString()}
               </td>
               <td className='whitespace-nowrap px-6 py-4 text-right text-sm'>

@@ -237,7 +237,7 @@ export default function EditMemberModal({
               <button
                 key={tag.id}
                 onClick={() => toggleTag(tag.id)}
-                className={`inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium border ${
+                className={`inline-flex items-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium border ${
                   selectedTagIds.includes(tag.id)
                     ? 'border-gray-800 text-white'
                     : 'border-gray-200 text-gray-700'

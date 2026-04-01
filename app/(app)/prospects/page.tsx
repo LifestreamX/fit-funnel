@@ -97,7 +97,15 @@ export default function ProspectsPage() {
 
   const fetchTags = () => {
     fetch('/api/settings/tags')
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) return [];
+        try {
+          const data = await r.json();
+          return Array.isArray(data) ? data : [];
+        } catch {
+          return [];
+        }
+      })
       .then((data) => setAvailableTags(data))
       .catch(() => setAvailableTags([]));
   };

@@ -61,15 +61,9 @@ export default async function Home() {
           <div className='mt-10 flex justify-center gap-4'>
             <Link
               href='/register'
-              className='cursor-pointer rounded-lg bg-orange-600 px-8 py-3 text-base font-medium text-white shadow-lg transition-all hover:bg-orange-700 hover:shadow-xl'
+              className='cursor-pointer rounded-lg bg-orange-600 px-8 py-3 text-base font-medium text-white transition-colors hover:bg-orange-700'
             >
               Get Started Now
-            </Link>
-            <Link
-              href='/login'
-              className='cursor-pointer rounded-lg border border-gray-300 bg-white px-8 py-3 text-base font-medium text-gray-700 transition-colors hover:bg-gray-50'
-            >
-              Sign In
             </Link>
           </div>
         </div>

@@ -33,6 +33,11 @@ export async function GET(req: Request) {
       assignedTo: { select: { id: true, name: true, email: true } },
       createdBy: { select: { id: true, name: true } },
       tags: { include: { tag: true } },
+      logs: {
+        orderBy: { createdAt: 'desc' },
+        take: 1,
+        include: { trainer: { select: { id: true, name: true } } },
+      },
     },
     orderBy: { updatedAt: 'desc' },
   });
