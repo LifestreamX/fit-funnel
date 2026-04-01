@@ -1,4 +1,4 @@
-# FitFunnel 🏋️
+FitFunnel
 
 A prospect management platform for personal trainers and fitness managers.
 
