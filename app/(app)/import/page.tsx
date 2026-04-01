@@ -21,6 +21,7 @@ export default function ImportPage() {
     count: number;
   } | null>(null);
   const [error, setError] = useState('');
+  const [showAllPreview, setShowAllPreview] = useState(false);
 
   const handleFileSelect = (file: File) => {
     Papa.parse(file, {
@@ -223,9 +224,21 @@ export default function ImportPage() {
           <div className='space-y-6'>
             {/* Preview */}
             <div className='rounded-lg border border-gray-200 bg-white p-6'>
-              <h3 className='text-lg font-medium text-gray-900 mb-4'>
-                CSV Preview (first 5 rows)
-              </h3>
+              <div className='flex items-center justify-between'>
+                <h3 className='text-lg font-medium text-gray-900 mb-4'>
+                  CSV Preview {showAllPreview ? '(all rows)' : '(first 5 rows)'}
+                </h3>
+                {csvData.length > 5 && (
+                  <button
+                    onClick={() => setShowAllPreview((v) => !v)}
+                    className='text-sm text-gray-500 hover:text-gray-700'
+                  >
+                    {showAllPreview
+                      ? 'Show less'
+                      : `Show all (${csvData.length})`}
+                  </button>
+                )}
+              </div>
               <div className='overflow-x-auto'>
                 <table className='min-w-full divide-y divide-gray-200 text-sm'>
                   <thead className='bg-gray-50'>
@@ -241,15 +254,17 @@ export default function ImportPage() {
                     </tr>
                   </thead>
                   <tbody className='divide-y divide-gray-200'>
-                    {csvData.slice(0, 5).map((row, idx) => (
-                      <tr key={idx}>
-                        {csvHeaders.map((h) => (
-                          <td key={h} className='px-4 py-2 text-gray-700'>
-                            {row[h] || '—'}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
+                    {(showAllPreview ? csvData : csvData.slice(0, 5)).map(
+                      (row, idx) => (
+                        <tr key={idx}>
+                          {csvHeaders.map((h) => (
+                            <td key={h} className='px-4 py-2 text-gray-700'>
+                              {row[h] || '—'}
+                            </td>
+                          ))}
+                        </tr>
+                      ),
+                    )}
                   </tbody>
                 </table>
               </div>

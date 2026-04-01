@@ -6,6 +6,7 @@ import AuthGuard from '@/components/layout/AuthGuard';
 import MemberTable from '@/components/ui/MemberTable';
 import OutreachModal from '@/components/ui/OutreachModal';
 import EditMemberModal from '@/components/ui/EditMemberModal';
+import DeleteConfirmModal from '@/components/ui/DeleteConfirmModal';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { statusLabels } from '@/lib/utils';
 import Select from '@/components/ui/Select';
@@ -55,6 +56,14 @@ export default function ProspectsPage() {
     open: false,
     member: null,
   });
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean;
+    member: Member | null;
+  }>({
+    open: false,
+    member: null,
+  });
+  const [deleting, setDeleting] = useState(false);
 
   const role = (session?.user as any)?.role;
   const isManager = role === 'MANAGER';
@@ -115,6 +124,29 @@ export default function ProspectsPage() {
     setNewMember({ firstName: '', lastName: '', email: '', phone: '' });
     setShowAddForm(false);
     fetchMembers();
+  };
+
+  const handleDeleteMember = async () => {
+    if (!deleteModal.member) return;
+    setDeleting(true);
+
+    try {
+      const res = await fetch(`/api/members/${deleteModal.member.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || 'Failed to delete member');
+      } else {
+        fetchMembers();
+      }
+    } catch {
+      alert('Something went wrong');
+    } finally {
+      setDeleting(false);
+      setDeleteModal({ open: false, member: null });
+    }
   };
 
   return (
@@ -208,7 +240,7 @@ export default function ProspectsPage() {
                 label,
               })),
             ]}
-            className='min-w-[160px]'
+            className='min-w-40'
           />
           {isManager && (
             <Select
@@ -222,7 +254,7 @@ export default function ProspectsPage() {
                   label: trainer.name,
                 })),
               ]}
-              className='min-w-[160px]'
+              className='min-w-40'
             />
           )}
         </div>
@@ -232,6 +264,7 @@ export default function ProspectsPage() {
           members={filteredMembers}
           showCreatedBy={isManager}
           onEdit={(member) => setEditModal({ open: true, member })}
+          onDelete={(member) => setDeleteModal({ open: true, member })}
           onLogOutreach={(member) => setOutreachModal({ open: true, member })}
         />
 
@@ -253,6 +286,18 @@ export default function ProspectsPage() {
             isOpen={outreachModal.open}
             onClose={() => setOutreachModal({ open: false, member: null })}
             onSubmit={fetchMembers}
+          />
+        )}
+
+        {/* Delete Modal */}
+        {deleteModal.member && (
+          <DeleteConfirmModal
+            isOpen={deleteModal.open}
+            title='Delete Prospect'
+            message={`Are you sure you want to delete ${deleteModal.member.firstName} ${deleteModal.member.lastName}? This will also delete all their outreach logs and history. This action cannot be undone.`}
+            onConfirm={handleDeleteMember}
+            onCancel={() => setDeleteModal({ open: false, member: null })}
+            loading={deleting}
           />
         )}
       </div>

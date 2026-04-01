@@ -83,7 +83,7 @@ function AcceptInviteForm() {
 
   if (valid === null) {
     return (
-      <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 to-red-50'>
+      <div className='flex min-h-screen items-center justify-center bg-linear-to-br from-orange-50 to-red-50'>
         <div className='h-8 w-8 animate-spin rounded-full border-4 border-orange-600 border-t-transparent'></div>
       </div>
     );
@@ -91,7 +91,7 @@ function AcceptInviteForm() {
 
   if (valid === false) {
     return (
-      <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 px-4'>
+      <div className='flex min-h-screen items-center justify-center bg-linear-to-br from-orange-50 to-red-50 px-4'>
         <div className='w-full max-w-md text-center'>
           <h1 className='text-3xl font-bold text-gray-900'>💪 FitFunnel</h1>
           <div className='mt-8 rounded-2xl bg-white p-8 shadow-xl'>

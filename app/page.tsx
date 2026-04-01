@@ -17,7 +17,7 @@ export default async function Home() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50'>
+    <div className='min-h-screen bg-linear-to-br from-orange-50 via-white to-red-50'>
       {/* Navigation */}
       <nav className='border-b border-gray-200 bg-white/80 backdrop-blur-sm'>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>

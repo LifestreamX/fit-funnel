@@ -27,6 +27,7 @@ export default function TrainersPage() {
     trainer: TrainerData | null;
   }>({ isOpen: false, trainer: null });
   const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
 
   const fetchTrainers = () => {
     fetch('/api/trainers')
@@ -45,6 +46,7 @@ export default function TrainersPage() {
     if (!deleteModal.trainer) return;
 
     setDeleting(true);
+    setError('');
 
     try {
       const res = await fetch(`/api/trainers/${deleteModal.trainer.id}`, {
@@ -53,14 +55,14 @@ export default function TrainersPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || 'Failed to delete trainer');
+        setError(data.error || 'Failed to delete trainer');
         return;
       }
 
       fetchTrainers();
       setDeleteModal({ isOpen: false, trainer: null });
     } catch {
-      alert('Something went wrong');
+      setError('Something went wrong');
     } finally {
       setDeleting(false);
     }
@@ -78,6 +80,12 @@ export default function TrainersPage() {
             + Invite Trainer
           </button>
         </div>
+
+        {error && (
+          <div className='rounded-lg bg-red-50 border border-red-200 p-4'>
+            <p className='text-sm text-red-800'>{error}</p>
+          </div>
+        )}
 
         {/* Active Trainers */}
         <div>

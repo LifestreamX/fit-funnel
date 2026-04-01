@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Select from '@/components/ui/Select';
+import DeleteConfirmModal from '@/components/ui/DeleteConfirmModal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -33,6 +34,18 @@ export default function SettingsPage() {
   const [newTagColor, setNewTagColor] = useState('#3B82F6');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean;
+    type: 'stage' | 'tag' | null;
+    id: string | null;
+    name: string | null;
+  }>({
+    open: false,
+    type: null,
+    id: null,
+    name: null,
+  });
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -93,9 +106,12 @@ export default function SettingsPage() {
     }
   };
 
-  const deleteStage = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this stage?')) return;
+  const deleteStage = async (id: string, name: string) => {
+    setDeleteModal({ open: true, type: 'stage', id, name });
+  };
 
+  const confirmDeleteStage = async (id: string) => {
+    setDeleting(true);
     try {
       const res = await fetch(`/api/settings/pipeline?id=${id}`, {
         method: 'DELETE',
@@ -110,6 +126,9 @@ export default function SettingsPage() {
       }
     } catch {
       setError('Failed to delete stage');
+    } finally {
+      setDeleting(false);
+      setDeleteModal({ open: false, type: null, id: null, name: null });
     }
   };
 
@@ -167,9 +186,12 @@ export default function SettingsPage() {
     }
   };
 
-  const deleteTag = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this tag?')) return;
+  const deleteTag = async (id: string, name: string) => {
+    setDeleteModal({ open: true, type: 'tag', id, name });
+  };
 
+  const confirmDeleteTag = async (id: string) => {
+    setDeleting(true);
     try {
       const res = await fetch(`/api/settings/tags?id=${id}`, {
         method: 'DELETE',
@@ -184,6 +206,9 @@ export default function SettingsPage() {
       }
     } catch {
       setError('Failed to delete tag');
+    } finally {
+      setDeleting(false);
+      setDeleteModal({ open: false, id: null, type: null, name: null });
     }
   };
 
@@ -378,10 +403,10 @@ export default function SettingsPage() {
                         value: color.value,
                         label: color.name,
                       }))}
-                      className='min-w-[120px]'
+                      className='min-w-30'
                     />
                     <button
-                      onClick={() => deleteStage(stage.id)}
+                      onClick={() => deleteStage(stage.id, stage.name)}
                       className='px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium'
                     >
                       Delete
@@ -463,7 +488,7 @@ export default function SettingsPage() {
                     </span>
                   </div>
                   <button
-                    onClick={() => deleteTag(tag.id)}
+                    onClick={() => deleteTag(tag.id, tag.name)}
                     className='text-red-600 hover:bg-red-50 p-1 rounded transition-colors text-sm'
                   >
                     ✕
@@ -479,6 +504,30 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
+
+      {/* Delete Modal */}
+      <DeleteConfirmModal
+        isOpen={deleteModal.open}
+        title={`Delete ${deleteModal.type === 'stage' ? 'Stage' : 'Tag'}`}
+        message={`Are you sure you want to delete the ${
+          deleteModal.type
+        } "${deleteModal.name}"? ${
+          deleteModal.type === 'stage'
+            ? 'Members in this stage will have their stage removed.'
+            : 'This tag will be removed from all members.'
+        } This action cannot be undone.`}
+        onConfirm={() => {
+          if (deleteModal.type === 'stage' && deleteModal.id) {
+            confirmDeleteStage(deleteModal.id);
+          } else if (deleteModal.type === 'tag' && deleteModal.id) {
+            confirmDeleteTag(deleteModal.id);
+          }
+        }}
+        onCancel={() =>
+          setDeleteModal({ open: false, type: null, id: null, name: null })
+        }
+        loading={deleting}
+      />
     </div>
   );
 }

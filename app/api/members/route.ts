@@ -21,7 +21,7 @@ export async function GET() {
     where,
     include: {
       assignedTo: { select: { id: true, name: true, email: true } },
-      // createdBy is not a valid include property for MemberInclude<DefaultArgs>
+      createdBy: { select: { id: true, name: true } },
     },
     orderBy: { updatedAt: 'desc' },
   });
@@ -57,6 +57,7 @@ export async function POST(req: Request) {
         email,
         phone,
         gymId,
+        createdById: userId,
         assignedToId: role === 'TRAINER' ? userId : null,
       },
     });

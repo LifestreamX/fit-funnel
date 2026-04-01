@@ -5,16 +5,19 @@ A prospect management platform for personal trainers and fitness managers.
 ## Features
 
 ### For Managers
+
 - Dashboard Analytics: Real-time stats and team performance tracking.
 - Trainer Management: Invite trainers via email and assign prospects.
 - CSV Import: Smart column mapping to bulk import leads.
 
 ### For Trainers
+
 - Assigned Prospects: Personalized dashboards for trainer-specific leads.
 - Outreach Logging: Log every call, text, and interaction with notes.
 - Pipeline Tracking: Move prospects through custom stages (New Lead → Contacted → Trial → PT).
 
 ## Tech Stack
+
 - Next.js 15+ (App Router, Turbopack)
 - Prisma + CockroachDB
 - NextAuth.js
@@ -55,6 +58,7 @@ A prospect management platform for personal trainers and fitness managers.
 - public/ — Static assets
 
 ## First-Time Setup
+
 - Register your first account (created as MANAGER)
 - Invite trainers via the Trainers page
 - Start adding prospects
