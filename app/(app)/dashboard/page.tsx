@@ -7,6 +7,7 @@ import AuthGuard from '@/components/layout/AuthGuard';
 import StatCard from '@/components/ui/StatCard';
 import MemberTable from '@/components/ui/MemberTable';
 import TrainerAssignModal from '@/components/ui/TrainerAssignModal';
+import OutreachModal from '@/components/ui/OutreachModal';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { statusLabels } from '@/lib/utils';
 import Select from '@/components/ui/Select';
