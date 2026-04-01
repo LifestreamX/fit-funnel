@@ -3,7 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Gym {
@@ -81,7 +82,7 @@ model PipelineStage {
 
 model Note {
   id        String   @id @default(cuid())
-  content   String   @db.String
+  content   String
   memberId  String
   member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   createdBy String
@@ -119,7 +120,7 @@ model Activity {
   member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   userId      String?
   user        User?    @relation(fields: [userId], references: [id])
-  metadata    String?  @db.String // JSON string for additional data
+  metadata    String?  // JSON string for additional data
   createdAt   DateTime @default(now())
 }
 
@@ -131,6 +132,6 @@ model OutreachLog {
   trainer   User           @relation(fields: [trainerId], references: [id])
   stageId   String?
   stage     PipelineStage? @relation(fields: [stageId], references: [id])
-  notes     String?        @db.String
+  notes     String?        
   createdAt DateTime       @default(now())
 }

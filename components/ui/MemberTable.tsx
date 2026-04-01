@@ -12,6 +12,7 @@ interface Member {
   assignedTo: { id: string; name: string } | null;
   createdBy: { id: string; name: string } | null;
   updatedAt: string;
+  tags?: { tag: { id: string; name: string; color: string } }[];
 }
 
 interface MemberTableProps {
@@ -84,6 +85,19 @@ export default function MemberTable({
             >
               <td className='whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900'>
                 {member.firstName} {member.lastName}
+                <div className='mt-2 flex flex-wrap gap-2'>
+                  {member.tags &&
+                    member.tags.length > 0 &&
+                    member.tags.map((mt) => (
+                      <span
+                        key={mt.tag.id}
+                        className='inline-flex items-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white'
+                        style={{ background: mt.tag.color }}
+                      >
+                        {mt.tag.name}
+                      </span>
+                    ))}
+                </div>
               </td>
               <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
                 {member.phone || '—'}

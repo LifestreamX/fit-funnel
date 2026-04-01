@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -17,11 +17,22 @@ export async function GET() {
     where.assignedToId = (session.user as any).id;
   }
 
+  try {
+    const url = new URL(req.url);
+    const tagId = url.searchParams.get('tagId');
+    if (tagId) {
+      where.tags = { some: { tagId } };
+    }
+  } catch (err) {
+    // ignore URL parsing errors
+  }
+
   const members = await prisma.member.findMany({
     where,
     include: {
       assignedTo: { select: { id: true, name: true, email: true } },
       createdBy: { select: { id: true, name: true } },
+      tags: { include: { tag: true } },
     },
     orderBy: { updatedAt: 'desc' },
   });

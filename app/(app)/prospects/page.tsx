@@ -34,6 +34,10 @@ export default function ProspectsPage() {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [statusFilter, setStatusFilter] = useState('');
   const [trainerFilter, setTrainerFilter] = useState('');
+  const [tagFilter, setTagFilter] = useState('');
+  const [availableTags, setAvailableTags] = useState<
+    { id: string; name: string }[]
+  >([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newMember, setNewMember] = useState({
     firstName: '',
@@ -68,8 +72,9 @@ export default function ProspectsPage() {
   const role = (session?.user as any)?.role;
   const isManager = role === 'MANAGER';
 
-  const fetchMembers = () => {
-    fetch('/api/members')
+  const fetchMembers = (tagId?: string) => {
+    const q = tagId ? `?tagId=${encodeURIComponent(tagId)}` : '';
+    fetch(`/api/members${q}`)
       .then((r) => r.json())
       .then((data) => {
         // Ensure createdBy is always present (null if missing)
@@ -90,10 +95,22 @@ export default function ProspectsPage() {
     }
   };
 
+  const fetchTags = () => {
+    fetch('/api/settings/tags')
+      .then((r) => r.json())
+      .then((data) => setAvailableTags(data))
+      .catch(() => setAvailableTags([]));
+  };
+
   useEffect(() => {
-    fetchMembers();
+    fetchMembers(tagFilter || undefined);
     fetchTrainers();
+    fetchTags();
   }, [isManager]);
+
+  useEffect(() => {
+    fetchMembers(tagFilter || undefined);
+  }, [tagFilter]);
 
   const filteredMembers = members.filter((m) => {
     if (statusFilter && m.status !== statusFilter) return false;
@@ -239,6 +256,15 @@ export default function ProspectsPage() {
                 value: key,
                 label,
               })),
+            ]}
+            className='min-w-40'
+          />
+          <Select
+            value={tagFilter}
+            onChange={setTagFilter}
+            options={[
+              { value: '', label: 'All Tags' },
+              ...availableTags.map((t) => ({ value: t.id, label: t.name })),
             ]}
             className='min-w-40'
           />

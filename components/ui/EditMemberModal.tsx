@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PhoneInput from './PhoneInput';
 
 interface Member {
@@ -30,6 +30,11 @@ export default function EditMemberModal({
   const [phone, setPhone] = useState(member.phone || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [allTags, setAllTags] = useState<
+    { id: string; name: string; color: string }[]
+  >([]);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+  const [tagsLoading, setTagsLoading] = useState(false);
 
   if (!isOpen) return null;
 
@@ -62,6 +67,71 @@ export default function EditMemberModal({
     } catch {
       setError('Something went wrong');
       setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // load tags and member's tags
+    const load = async () => {
+      setTagsLoading(true);
+      try {
+        const [tagsRes, memberTagsRes] = await Promise.all([
+          fetch('/api/settings/tags'),
+          fetch(`/api/members/${member.id}/tags`),
+        ]);
+
+        if (tagsRes.ok) {
+          const tags = await tagsRes.json();
+          setAllTags(tags);
+        }
+
+        if (memberTagsRes.ok) {
+          const memberTags = await memberTagsRes.json();
+          setSelectedTagIds(memberTags.map((t: any) => t.id));
+        }
+      } catch (err) {
+        // ignore
+      } finally {
+        setTagsLoading(false);
+      }
+    };
+
+    load();
+  }, [member.id]);
+
+  const toggleTag = (tagId: string) => {
+    setSelectedTagIds((prev) =>
+      prev.includes(tagId) ? prev.filter((t) => t !== tagId) : [...prev, tagId],
+    );
+  };
+
+  const handleSaveTags = async () => {
+    setTagsLoading(true);
+    try {
+      // fetch current member tags to diff
+      const res = await fetch(`/api/members/${member.id}/tags`);
+      const current: any[] = res.ok ? await res.json() : [];
+      const currentIds = current.map((t) => t.id);
+
+      const toAdd = selectedTagIds.filter((id) => !currentIds.includes(id));
+      const toRemove = currentIds.filter((id) => !selectedTagIds.includes(id));
+
+      await Promise.all([
+        ...toAdd.map((id) =>
+          fetch(`/api/members/${member.id}/tags`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tagId: id }),
+          }),
+        ),
+        ...toRemove.map((id) =>
+          fetch(`/api/members/${member.id}/tags/${id}`, { method: 'DELETE' }),
+        ),
+      ]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setTagsLoading(false);
     }
   };
 
@@ -148,6 +218,54 @@ export default function EditMemberModal({
             </button>
           </div>
         </form>
+
+        <div className='mt-6'>
+          <h3 className='text-sm font-medium text-gray-900'>Tags</h3>
+          <p className='mt-1 text-sm text-gray-500'>
+            Assign tags to this prospect.
+          </p>
+
+          <div className='mt-3 flex flex-wrap gap-2'>
+            {tagsLoading && (
+              <div className='text-sm text-gray-500'>Loading tags...</div>
+            )}
+            {!tagsLoading && allTags.length === 0 && (
+              <div className='text-sm text-gray-400'>No tags yet</div>
+            )}
+
+            {allTags.map((tag) => (
+              <button
+                key={tag.id}
+                onClick={() => toggleTag(tag.id)}
+                className={`inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium border ${
+                  selectedTagIds.includes(tag.id)
+                    ? 'border-gray-800 text-white'
+                    : 'border-gray-200 text-gray-700'
+                }`}
+                style={
+                  selectedTagIds.includes(tag.id)
+                    ? { background: tag.color }
+                    : undefined
+                }
+              >
+                <span
+                  className='h-2 w-2 rounded-full'
+                  style={{ background: tag.color }}
+                />
+                {tag.name}
+              </button>
+            ))}
+          </div>
+
+          <div className='mt-4 flex justify-end'>
+            <button
+              onClick={handleSaveTags}
+              className='rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 hover:bg-gray-200'
+            >
+              {tagsLoading ? 'Saving...' : 'Save Tags'}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
