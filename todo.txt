@@ -1,9 +1,10 @@
 
 
 
-TODO: Mobile Responsive: some things overlap and don't look right on mobile; use cards instead of tables on mobile.
+TODO: Mobbile Responsive: some things overlap and dont look right on mobile also we should use cards instead of table on mobile for propset or anyting that uses table on mobile desktop is fine mobile it looks awful and should use cards 
 
-TODO: Can't see note for prospect after creating items
+TODO: Cant see note for prospect after creating items
 
-TODO: Tagging feature needs to be working flawlessly
+TODO: Tagging feature needs to be working flawless
+
 
