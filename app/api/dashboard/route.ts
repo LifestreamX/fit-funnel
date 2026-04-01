@@ -11,10 +11,14 @@ export async function GET() {
 
   const gymId = (session.user as any).gymId;
 
-  const members = await prisma.member.findMany({
+  // Use a generic query to avoid Vercel-specific type mismatches
+  const members = (await prisma.member.findMany({
     where: { gymId },
-    select: { stageId: true },
-  });
+    select: { 
+      id: true,
+      stageId: true 
+    },
+  })) as any[];
 
   // You may want to map stageId to human-readable status here, or count by stageId
   const total = members.length;
