@@ -30,9 +30,9 @@ export async function POST(req: Request) {
     }
 
     // Try to find the corresponding pipeline stage for the gym
-    const stage = await prisma.pipeline_stage.findFirst({
+    const stage = await prisma.pipelineStage.findFirst({
       where: {
-        gym_id: gymId,
+        gymId,
         name: {
           contains: outcome.replace('_', ' ').toLowerCase(),
           mode: 'insensitive',
@@ -41,11 +41,11 @@ export async function POST(req: Request) {
     });
 
     const [log] = await prisma.$transaction([
-      prisma.outreach_log.create({
+      prisma.outreachLog.create({
         data: {
-          member_id: memberId,
-          trainer_id: trainerId,
-          stage_id: stage?.id || null,
+          memberId,
+          trainerId,
+          stageId: stage?.id || null,
           notes: notes || null,
         },
       }),
@@ -53,8 +53,8 @@ export async function POST(req: Request) {
         where: { id: memberId },
         data: {
           status: outcome,
-          stage_id: stage?.id || member.stage_id,
-          updated_at: new Date(),
+          stageId: stage?.id || member.stageId,
+          updatedAt: new Date(),
         },
       }),
     ]);
