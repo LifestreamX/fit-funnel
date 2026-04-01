@@ -14,15 +14,16 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { name, email } = await req.json();
+    const { name, email: rawEmail } = await req.json();
 
-    if (!name || !email) {
+    if (!name || !rawEmail) {
       return NextResponse.json(
         { error: 'Name and email are required' },
         { status: 400 },
       );
     }
 
+    const email = rawEmail.toLowerCase();
     const gymId = (session.user as any).gymId;
     const token = randomUUID();
     const expires = new Date(Date.now() + 48 * 60 * 60 * 1000);
