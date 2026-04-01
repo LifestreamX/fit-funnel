@@ -58,6 +58,3 @@ A prospect management platform for personal trainers and fitness managers.
 - Register your first account (created as MANAGER)
 - Invite trainers via the Trainers page
 - Start adding prospects
-
-## License
-Proprietary - All rights reserved
