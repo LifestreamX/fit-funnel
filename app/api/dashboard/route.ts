@@ -17,22 +17,20 @@ export async function GET() {
     select: {
       id: true,
       stageId: true,
+      status: true,
     },
   })) as any[];
 
-  // You may want to map stageId to human-readable status here, or count by stageId
-  const total = members.length;
-  // Example: group by stageId (status)
-  const stageCounts: Record<string, number> = {};
-  for (const m of members) {
-    const sid = m.stageId;
-    if (sid) {
-      stageCounts[sid] = (stageCounts[sid] || 0) + 1;
-    }
-  }
+  // Statistics based on Member status
+  const stats = {
+    total: members.length,
+    contacted: members.filter((m) => m.status === 'CONTACTED').length,
+    booked: members.filter((m) => m.status === 'ORIENTATION_BOOKED').length,
+    converted: members.filter((m) => m.status === 'CONVERTED').length,
+    noAnswer: members.filter((m) => m.status === 'NO_ANSWER').length,
+    notInterested: members.filter((m) => m.status === 'NOT_INTERESTED').length,
+    notContacted: members.filter((m) => m.status === 'NOT_CONTACTED').length,
+  };
 
-  return NextResponse.json({
-    total,
-    stageCounts,
-  });
+  return NextResponse.json(stats);
 }
