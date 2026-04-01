@@ -128,6 +128,8 @@ export default function EditMemberModal({
           fetch(`/api/members/${member.id}/tags/${id}`, { method: 'DELETE' }),
         ),
       ]);
+      // refresh parent view
+      onUpdate();
     } catch (err) {
       console.error(err);
     } finally {
