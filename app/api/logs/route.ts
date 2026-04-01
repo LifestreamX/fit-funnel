@@ -29,24 +29,41 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Member not found' }, { status: 404 });
     }
 
+    // Try to find the corresponding pipeline stage for the gym
+    const stage = await prisma.pipeline_stage.findFirst({
+      where: {
+        gym_id: gymId,
+        name: {
+          contains: outcome.replace('_', ' ').toLowerCase(),
+          mode: 'insensitive',
+        },
+      },
+    });
+
     const [log] = await prisma.$transaction([
-      prisma.outreachLog.create({
+      prisma.outreach_log.create({
         data: {
-          memberId,
-          trainerId,
+          member_id: memberId,
+          trainer_id: trainerId,
+          stage_id: stage?.id || null,
           notes: notes || null,
         },
       }),
       prisma.member.update({
         where: { id: memberId },
-        data: { status: outcome },
+        data: {
+          status: outcome,
+          stage_id: stage?.id || member.stage_id,
+          updated_at: new Date(),
+        },
       }),
     ]);
 
     return NextResponse.json(log);
-  } catch {
+  } catch (error: any) {
+    console.error('[OUTREACH_LOG_ERROR]', error);
     return NextResponse.json(
-      { error: 'Something went wrong' },
+      { error: error?.message || 'Something went wrong' },
       { status: 500 },
     );
   }
