@@ -45,3 +45,5 @@ prisma/dev.db
 
 # local backups
 backups/
+# personal todo file (keep local)
+todo.txt
