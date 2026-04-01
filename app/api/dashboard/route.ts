@@ -14,9 +14,9 @@ export async function GET() {
   // Bypass Prisma type check completely using a raw query or any to avoid Vercel build failures
   const members = (await (prisma.member as any).findMany({
     where: { gymId },
-    select: { 
+    select: {
       id: true,
-      stageId: true 
+      stageId: true,
     },
   })) as any[];
 
