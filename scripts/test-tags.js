@@ -13,7 +13,9 @@ async function main() {
     },
   });
 
-  const tag = await prisma.tag.create({ data: { name: `Tag-${Date.now()}`, gymId: gym.id } });
+  const tag = await prisma.tag.create({
+    data: { name: `Tag-${Date.now()}`, gymId: gym.id },
+  });
 
   const member = await prisma.member.create({
     data: {
@@ -24,7 +26,9 @@ async function main() {
     },
   });
 
-  await prisma.memberTag.create({ data: { memberId: member.id, tagId: tag.id } });
+  await prisma.memberTag.create({
+    data: { memberId: member.id, tagId: tag.id },
+  });
 
   const loaded = await prisma.member.findUnique({
     where: { id: member.id },

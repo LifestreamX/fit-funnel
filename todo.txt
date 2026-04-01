@@ -1,0 +1,5 @@
+
+TODO: 
+- Mobile friendly
+- Can't see note after making?
+- Tagging

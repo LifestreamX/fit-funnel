@@ -13,7 +13,11 @@ interface Member {
   createdBy: { id: string; name: string } | null;
   updatedAt: string;
   tags?: { tag: { id: string; name: string; color: string } }[];
-  logs?: { notes?: string | null; createdAt?: string | null; trainer?: { id: string; name: string } | null }[];
+  logs?: {
+    notes?: string | null;
+    createdAt?: string | null;
+    trainer?: { id: string; name: string } | null;
+  }[];
 }
 
 interface MemberTableProps {
@@ -90,11 +94,13 @@ export default function MemberTable({
                     {member.firstName} {member.lastName}
                   </div>
 
-                  {member.logs && member.logs.length > 0 && member.logs[0].notes && (
-                    <div className='mt-1 text-xs text-gray-500 max-w-[18rem] truncate'>
-                      📝 {member.logs[0].notes}
-                    </div>
-                  )}
+                  {member.logs &&
+                    member.logs.length > 0 &&
+                    member.logs[0].notes && (
+                      <div className='mt-1 text-xs text-gray-500 max-w-[18rem] truncate'>
+                        📝 {member.logs[0].notes}
+                      </div>
+                    )}
 
                   <div className='mt-2 flex flex-wrap gap-2'>
                     {member.tags &&
