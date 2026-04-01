@@ -81,9 +81,13 @@ export default function MemberTable({
             <div className='mt-3 text-sm text-gray-500'>
               <div className='truncate'>{member.phone || '—'}</div>
               <div className='truncate'>{member.email || '—'}</div>
-              {member.logs && member.logs.length > 0 && member.logs[0].notes && (
-                <div className='mt-2 text-xs text-gray-600'>📝 {member.logs[0].notes}</div>
-              )}
+              {member.logs &&
+                member.logs.length > 0 &&
+                member.logs[0].notes && (
+                  <div className='mt-2 text-xs text-gray-600'>
+                    📝 {member.logs[0].notes}
+                  </div>
+                )}
 
               <div className='mt-2 flex flex-wrap gap-2'>
                 {member.tags &&
