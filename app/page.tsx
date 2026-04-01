@@ -63,7 +63,7 @@ export default async function Home() {
               href='/register'
               className='cursor-pointer rounded-lg bg-orange-600 px-8 py-3 text-base font-medium text-white shadow-lg transition-all hover:bg-orange-700 hover:shadow-xl'
             >
-              Start Free Trial
+              Get Started Now
             </Link>
             <Link
               href='/login'
