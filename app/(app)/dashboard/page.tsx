@@ -62,10 +62,7 @@ export default function DashboardPage() {
   });
   const [addError, setAddError] = useState('');
 
-  const fetchData = () => {
-    fetch('/api/dashboard')
-      .then((r) => r.json())
-      .then(setStats);
+  const fetchMembers = () => {
     fetch('/api/members')
       .then((r) => r.json())
       .then((data) => {
@@ -76,6 +73,13 @@ export default function DashboardPage() {
           })),
         );
       });
+  };
+
+  const fetchData = () => {
+    fetch('/api/dashboard')
+      .then((r) => r.json())
+      .then(setStats);
+    fetchMembers();
     fetch('/api/trainers')
       .then((r) => r.json())
       .then(setTrainers);
@@ -111,6 +115,14 @@ export default function DashboardPage() {
     setShowAddForm(false);
     fetchData();
   };
+
+  const [outreachModal, setOutreachModal] = useState<{
+    open: boolean;
+    member: Member | null;
+  }>({
+    open: false,
+    member: null,
+  });
 
   return (
     <AuthGuard requireRole='MANAGER'>
@@ -250,6 +262,7 @@ export default function DashboardPage() {
           showTrainer
           showCreatedBy
           onAssignTrainer={(member) => setAssignModal({ open: true, member })}
+          onLogOutreach={(member) => setOutreachModal({ open: true, member })}
         />
 
         {/* Assign Trainer Modal */}
@@ -261,6 +274,17 @@ export default function DashboardPage() {
             isOpen={assignModal.open}
             onClose={() => setAssignModal({ open: false, member: null })}
             onAssign={fetchData}
+          />
+        )}
+
+        {/* Outreach Modal */}
+        {outreachModal.member && (
+          <OutreachModal
+            memberId={outreachModal.member.id}
+            memberName={`${outreachModal.member.firstName} ${outreachModal.member.lastName}`}
+            isOpen={outreachModal.open}
+            onClose={() => setOutreachModal({ open: false, member: null })}
+            onSubmit={fetchData}
           />
         )}
       </div>

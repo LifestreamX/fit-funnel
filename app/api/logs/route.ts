@@ -37,7 +37,10 @@ export async function POST(req: Request) {
           notes: notes || null,
         },
       }),
-      // Optionally update member's stageId here if outcome maps to a stage
+      prisma.member.update({
+        where: { id: memberId },
+        data: { status: outcome },
+      }),
     ]);
 
     return NextResponse.json(log);

@@ -48,6 +48,7 @@ model Member {
   lastName     String
   email        String?
   phone        String?
+  status       String         @default("NOT_CONTACTED")
   stageId      String?
   stage        PipelineStage? @relation(fields: [stageId], references: [id])
   gymId        String
