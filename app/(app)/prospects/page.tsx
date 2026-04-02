@@ -243,6 +243,13 @@ export default function ProspectsPage() {
                   className='flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
                 />
                 <button
+                  type='button'
+                  onClick={() => setShowAddForm(false)}
+                  className='cursor-pointer rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
+                >
+                  Cancel
+                </button>
+                <button
                   type='submit'
                   className='cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
                 >
