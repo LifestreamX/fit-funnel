@@ -82,19 +82,19 @@ export default function MemberTable({
             </div>
 
             <div className='mt-3 text-sm text-gray-500'>
-              <div className='truncate'>{member.phone || '—'}</div>
-              <div className='truncate'>{member.email || '—'}</div>
+              <div className='truncate max-w-full overflow-hidden'>{member.phone || '—'}</div>
+              <div className='truncate max-w-full overflow-hidden'>{member.email || '—'}</div>
               {member.logs &&
                 member.logs.length > 0 &&
                 member.logs[0].notes && (
-                  <div className='mt-2 text-xs text-gray-600'>
+                  <div className='mt-2 text-xs text-gray-600 overflow-hidden'>
                     <button
                       type='button'
                       onClick={() => {
                         setNoteContent(member.logs![0].notes || '');
                         setNoteOpen(true);
                       }}
-                      className='text-left text-xs text-gray-600 underline'
+                      className='text-left text-xs text-gray-600 underline block w-full overflow-hidden'
                     >
                       📝 <span className='inline-block max-w-[20rem] truncate align-middle'>{member.logs[0].notes}</span>
                     </button>
@@ -204,14 +204,14 @@ export default function MemberTable({
                     {member.logs &&
                       member.logs.length > 0 &&
                       member.logs[0].notes && (
-                        <div className='mt-1 text-xs text-gray-500 max-w-[18rem]'>
+                        <div className='mt-1 text-xs text-gray-500 max-w-[18rem] overflow-hidden'>
                           <button
                             type='button'
                             onClick={() => {
                               setNoteContent(member.logs![0].notes || '');
                               setNoteOpen(true);
                             }}
-                            className='block text-left'
+                            className='block w-full text-left overflow-hidden'
                           >
                             <span className='inline-block max-w-full truncate whitespace-nowrap'>📝 {member.logs[0].notes}</span>
                           </button>
@@ -233,11 +233,11 @@ export default function MemberTable({
                     </div>
                   </div>
                 </td>
-                <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500 max-w-[10rem] truncate'>
-                  {member.phone || '—'}
+                <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
+                  <div className='max-w-[10rem] truncate overflow-hidden'>{member.phone || '—'}</div>
                 </td>
-                <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500 max-w-[12rem] truncate'>
-                  {member.email || '—'}
+                <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
+                  <div className='max-w-[12rem] truncate overflow-hidden'>{member.email || '—'}</div>
                 </td>
                 <td className='whitespace-nowrap px-6 py-4'>
                   <StatusBadge status={member.status} />
