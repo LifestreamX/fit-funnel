@@ -82,8 +82,12 @@ export default function MemberTable({
             </div>
 
             <div className='mt-3 text-sm text-gray-500'>
-              <div className='truncate max-w-full overflow-hidden'>{member.phone || '—'}</div>
-              <div className='truncate max-w-full overflow-hidden'>{member.email || '—'}</div>
+              <div className='truncate max-w-full overflow-hidden'>
+                {member.phone || '—'}
+              </div>
+              <div className='truncate max-w-full overflow-hidden'>
+                {member.email || '—'}
+              </div>
               {member.logs &&
                 member.logs.length > 0 &&
                 member.logs[0].notes && (
@@ -96,7 +100,10 @@ export default function MemberTable({
                       }}
                       className='text-left text-xs text-gray-600 underline block w-full overflow-hidden'
                     >
-                      📝 <span className='inline-block max-w-[20rem] truncate align-middle'>{member.logs[0].notes}</span>
+                      📝{' '}
+                      <span className='inline-block max-w-[20rem] truncate align-middle'>
+                        {member.logs[0].notes}
+                      </span>
                     </button>
                   </div>
                 )}
@@ -213,7 +220,9 @@ export default function MemberTable({
                             }}
                             className='block w-full text-left overflow-hidden'
                           >
-                            <span className='inline-block max-w-full truncate whitespace-nowrap'>📝 {member.logs[0].notes}</span>
+                            <span className='inline-block max-w-full truncate whitespace-nowrap'>
+                              📝 {member.logs[0].notes}
+                            </span>
                           </button>
                         </div>
                       )}
@@ -234,10 +243,14 @@ export default function MemberTable({
                   </div>
                 </td>
                 <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
-                  <div className='max-w-[10rem] truncate overflow-hidden'>{member.phone || '—'}</div>
+                  <div className='max-w-[10rem] truncate overflow-hidden'>
+                    {member.phone || '—'}
+                  </div>
                 </td>
                 <td className='whitespace-nowrap px-6 py-4 text-sm text-gray-500'>
-                  <div className='max-w-[12rem] truncate overflow-hidden'>{member.email || '—'}</div>
+                  <div className='max-w-[12rem] truncate overflow-hidden'>
+                    {member.email || '—'}
+                  </div>
                 </td>
                 <td className='whitespace-nowrap px-6 py-4'>
                   <StatusBadge status={member.status} />
@@ -334,7 +347,9 @@ export default function MemberTable({
       {noteOpen && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
           <div className='w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl'>
-            <h3 className='text-lg font-semibold text-gray-900'>Outreach Note</h3>
+            <h3 className='text-lg font-semibold text-gray-900'>
+              Outreach Note
+            </h3>
             <div className='mt-3 text-sm text-gray-700 whitespace-pre-wrap max-h-[60vh] overflow-auto'>
               {noteContent}
             </div>

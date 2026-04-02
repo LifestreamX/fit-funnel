@@ -45,12 +45,17 @@ export async function POST(req: Request) {
     } catch (e) {
       // Some providers (sqlite) don't support `mode: 'insensitive'`. Fall back to fetching
       // the stages for the gym and match case-insensitively in JS.
-      if (String((e as any)?.message || '').includes('Unknown argument `mode`')) {
+      if (
+        String((e as any)?.message || '').includes('Unknown argument `mode`')
+      ) {
         const stages = await prisma.pipelineStage.findMany({
           where: { gymId },
           select: { id: true, name: true },
         });
-        stage = stages.find((s) => (s.name || '').toLowerCase().includes(targetName)) || null;
+        stage =
+          stages.find((s) =>
+            (s.name || '').toLowerCase().includes(targetName),
+          ) || null;
       } else {
         throw e;
       }
