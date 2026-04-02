@@ -61,7 +61,8 @@ export default function ForgotPasswordPage() {
                 Check your email
               </h2>
               <p className='mt-2 text-sm text-gray-600'>
-                If an account exists for <strong>{email}</strong>, we&apos;ve sent a password reset link. The link will expire in 1 hour.
+                If an account exists for <strong>{email}</strong>, we&apos;ve
+                sent a password reset link. The link will expire in 1 hour.
               </p>
               <Link
                 href='/login'

@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { Resend } from 'resend';
+import { randomUUID } from 'crypto';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
@@ -25,7 +29,10 @@ export async function POST(req: Request) {
 
     const hashed = await bcrypt.hash(password, 12);
 
-    // Create gym and user in a transaction
+    // Create gym and user in a transaction and generate an email verification token
+    const token = randomUUID();
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
     const { gym, user } = await prisma.$transaction(async (tx) => {
       const gym = await tx.gym.create({ data: { name: gymName } });
       const user = await tx.user.create({
@@ -35,6 +42,8 @@ export async function POST(req: Request) {
           password: hashed,
           role: 'MANAGER',
           gymId: gym.id,
+          emailVerificationToken: token,
+          emailVerificationExpires: expires,
         },
       });
       return { gym, user };
@@ -74,6 +83,22 @@ export async function POST(req: Request) {
         gymId: gym.id,
       })),
     });
+
+    // Send verification email
+    try {
+      await resend.emails.send({
+        from: process.env.EMAIL_FROM!,
+        to: email,
+        subject: 'Confirm your FitFunnel account',
+        html: `
+          <h2>Confirm your email</h2>
+          <p>Thanks for creating an account. Click the link below to verify your email address. This link expires in 24 hours.</p>
+          <a href="${process.env.INVITE_BASE_URL}/verify-email?token=${token}">Verify Email</a>
+        `,
+      });
+    } catch (err) {
+      console.error('Verification email send failed:', err);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

@@ -56,7 +56,9 @@ export async function POST(req: Request) {
         .filter((e): e is string => typeof e === 'string' && e.length > 0),
     );
     const existingPhoneSet = new Set(
-      existingMembers.map((m) => m.phone).filter((p): p is string => typeof p === 'string' && p.length > 0),
+      existingMembers
+        .map((m) => m.phone)
+        .filter((p): p is string => typeof p === 'string' && p.length > 0),
     );
 
     // Track duplicates within the import batch

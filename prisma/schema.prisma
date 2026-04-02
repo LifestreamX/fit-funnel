@@ -22,6 +22,9 @@ model User {
   name               String
   email              String        @unique
   password           String?
+  emailVerified      DateTime?
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
   role               Role          @default(TRAINER)
   gymId              String
   gym                Gym           @relation(fields: [gymId], references: [id])

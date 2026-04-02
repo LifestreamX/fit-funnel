@@ -45,8 +45,8 @@ export default function RegisterPage() {
         return;
       }
 
-      // After registration, redirect user to the login page (do not auto-sign-in)
-      router.push('/login');
+      // After registration, redirect user to the login page and show verification notice
+      router.push('/login?registered=1');
     } catch {
       setError('Something went wrong');
       setLoading(false);

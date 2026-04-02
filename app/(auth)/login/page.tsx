@@ -1,8 +1,8 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -10,7 +10,18 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('registered')) {
+      setSuccess('Account created. Please check your email to verify your account.');
+    }
+    if (searchParams.get('verified')) {
+      setSuccess('Email verified. You can now sign in.');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +35,11 @@ export default function LoginPage() {
     });
 
     if (result?.error) {
-      setError('Invalid email or password');
+      if (result.error === 'EmailNotVerified') {
+        setError('Please verify your email before signing in.');
+      } else {
+        setError('Invalid email or password');
+      }
       setLoading(false);
       return;
     }
@@ -49,6 +64,12 @@ export default function LoginPage() {
         </div>
 
         <div className='mt-8 rounded-2xl bg-white p-8 shadow-xl'>
+          {success && (
+            <div className='mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700'>
+              {success}
+            </div>
+          )}
+
           {error && (
             <div className='mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700'>
               {error}

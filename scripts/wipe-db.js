@@ -8,7 +8,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function wipe() {
-  console.warn('WARNING: This will permanently DELETE data from the database pointed by DATABASE_URL.');
+  console.warn(
+    'WARNING: This will permanently DELETE data from the database pointed by DATABASE_URL.',
+  );
   if (!process.env.DATABASE_URL) {
     console.error('No DATABASE_URL found in environment. Aborting.');
     process.exit(1);
@@ -16,7 +18,9 @@ async function wipe() {
 
   const args = process.argv.slice(2);
   if (!args.includes('--yes')) {
-    console.log('Dry run. To actually wipe the DB run: node scripts/wipe-db.js --yes');
+    console.log(
+      'Dry run. To actually wipe the DB run: node scripts/wipe-db.js --yes',
+    );
     process.exit(0);
   }
 
