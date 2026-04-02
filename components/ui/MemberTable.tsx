@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import StatusBadge from './StatusBadge';
 
 interface Member {
@@ -39,6 +40,8 @@ export default function MemberTable({
   onDelete,
   onLogOutreach,
 }: MemberTableProps) {
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteContent, setNoteContent] = useState('');
   if (members.length === 0) {
     return (
       <div className='rounded-lg border border-gray-200 bg-white p-12 text-center'>
@@ -85,7 +88,16 @@ export default function MemberTable({
                 member.logs.length > 0 &&
                 member.logs[0].notes && (
                   <div className='mt-2 text-xs text-gray-600'>
-                    📝 {member.logs[0].notes}
+                    <button
+                      type='button'
+                      onClick={() => {
+                        setNoteContent(member.logs![0].notes || '');
+                        setNoteOpen(true);
+                      }}
+                      className='text-left text-xs text-gray-600 underline'
+                    >
+                      📝 <span className='block max-w-[20rem] truncate'>{member.logs[0].notes}</span>
+                    </button>
                   </div>
                 )}
 
@@ -192,8 +204,17 @@ export default function MemberTable({
                     {member.logs &&
                       member.logs.length > 0 &&
                       member.logs[0].notes && (
-                        <div className='mt-1 text-xs text-gray-500 max-w-[18rem] truncate'>
-                          📝 {member.logs[0].notes}
+                        <div className='mt-1 text-xs text-gray-500 max-w-[18rem]'>
+                          <button
+                            type='button'
+                            onClick={() => {
+                              setNoteContent(member.logs![0].notes || '');
+                              setNoteOpen(true);
+                            }}
+                            className='block truncate text-left'
+                          >
+                            📝 {member.logs[0].notes}
+                          </button>
                         </div>
                       )}
 
@@ -309,6 +330,25 @@ export default function MemberTable({
           </tbody>
         </table>
       </div>
+
+      {noteOpen && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
+          <div className='w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl'>
+            <h3 className='text-lg font-semibold text-gray-900'>Outreach Note</h3>
+            <div className='mt-3 text-sm text-gray-700 whitespace-pre-wrap max-h-[60vh] overflow-auto'>
+              {noteContent}
+            </div>
+            <div className='mt-4 flex justify-end'>
+              <button
+                onClick={() => setNoteOpen(false)}
+                className='rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 hover:bg-gray-200'
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
