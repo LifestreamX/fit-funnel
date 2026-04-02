@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Gym {
+  id        String          @id @default(cuid())
+  name      String
+  createdAt DateTime        @default(now())
+  users     User[]
+  members   Member[]
+  stages    PipelineStage[]
+  tags      Tag[]
+}
+
+model User {
+  id                 String        @id @default(cuid())
+  name               String
+  email              String        @unique
+  password           String?
+  emailVerified      DateTime?
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
+  role               Role          @default(TRAINER)
+  gymId              String
+  gym                Gym           @relation(fields: [gymId], references: [id])
+  assignedMembers    Member[]      @relation(name: "AssignedMembers")
+  createdMembers     Member[]      @relation(name: "CreatedMembers")
+  logs               OutreachLog[]
+  notes              Note[]
+  activities         Activity[]
+  inviteToken        String?       @unique
+  inviteExpires      DateTime?
+  resetToken         String?       @unique
+  resetTokenExpires  DateTime?
+  createdAt          DateTime      @default(now())
+}
+
+enum Role {
+  MANAGER
+  TRAINER
+}
+
+model Member {
+  id           String         @id @default(cuid())
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  status       String         @default("NOT_CONTACTED")
+  stageId      String?
+  stage        PipelineStage? @relation(fields: [stageId], references: [id])
+  gymId        String
+  gym          Gym            @relation(fields: [gymId], references: [id])
+  assignedToId String?
+  assignedTo   User?          @relation(fields: [assignedToId], references: [id], name: "AssignedMembers")
+  createdById  String?
+  createdBy    User?          @relation(fields: [createdById], references: [id], name: "CreatedMembers")
+  logs         OutreachLog[]
+  notes        Note[]
+  tags         MemberTag[]
+  activities   Activity[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model PipelineStage {
+  id          String   @id @default(cuid())
+  name        String
+  color       String   @default("#6B7280") // Hex color for the stage
+  order       Int      // Display order (0, 1, 2...)
+  isDefault   Boolean  @default(false) // Default stage for new prospects
+  gymId       String
+  gym         Gym      @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  members     Member[]
+  logs        OutreachLog[]
+  createdAt   DateTime @default(now())
+  
+  @@unique([gymId, order])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  content   String
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  createdBy String
+  user      User     @relation(fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id        String      @id @default(cuid())
+  name      String
+  color     String      @default("#3B82F6")
+  gymId     String
+  gym       Gym         @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  members   MemberTag[]
+  createdAt DateTime    @default(now())
+  
+  @@unique([gymId, name])
+}
+
+model MemberTag {
+  memberId String
+  member   Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  tagId    String
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([memberId, tagId])
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  type        String   // "status_change", "assigned", "note_added", "contacted", etc.
+  description String
+  memberId    String
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  metadata    String?  // JSON string for additional data
+  createdAt   DateTime @default(now())
+}
+
+model OutreachLog {
+  id        String         @id @default(cuid())
+  memberId  String
+  member    Member         @relation(fields: [memberId], references: [id])
+  trainerId String
+  trainer   User           @relation(fields: [trainerId], references: [id])
+  stageId   String?
+  stage     PipelineStage? @relation(fields: [stageId], references: [id])
+  notes     String?
+  createdAt DateTime       @default(now())
+}

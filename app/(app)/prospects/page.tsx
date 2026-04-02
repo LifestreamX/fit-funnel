@@ -202,7 +202,7 @@ export default function ProspectsPage() {
             )}
             <form
               onSubmit={handleAddMember}
-              className='grid grid-cols-1 gap-4 sm:grid-cols-4'
+              className='grid grid-cols-1 gap-4 md:grid-cols-2'
             >
               <input
                 type='text'
@@ -212,7 +212,7 @@ export default function ProspectsPage() {
                   setNewMember({ ...newMember, firstName: e.target.value })
                 }
                 required
-                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 md:col-span-1'
               />
               <input
                 type='text'
@@ -222,7 +222,7 @@ export default function ProspectsPage() {
                   setNewMember({ ...newMember, lastName: e.target.value })
                 }
                 required
-                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 md:col-span-1'
               />
               <input
                 type='email'
@@ -231,27 +231,27 @@ export default function ProspectsPage() {
                 onChange={(e) =>
                   setNewMember({ ...newMember, email: e.target.value })
                 }
-                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 md:col-span-1'
               />
-              <div className='flex gap-2'>
+              <div className='flex flex-col md:flex-row gap-2 md:col-span-1'>
                 <PhoneInput
                   value={newMember.phone}
                   onChange={(value) =>
                     setNewMember({ ...newMember, phone: value })
                   }
                   placeholder='(555) 123-4567'
-                  className='flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                  className='w-full md:flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
                 />
                 <button
                   type='button'
                   onClick={() => setShowAddForm(false)}
-                  className='cursor-pointer rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
+                  className='w-full md:w-auto cursor-pointer rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
                 >
                   Cancel
                 </button>
                 <button
                   type='submit'
-                  className='cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
+                  className='w-full md:w-auto cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
                 >
                   Add
                 </button>
