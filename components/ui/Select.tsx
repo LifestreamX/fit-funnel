@@ -65,7 +65,7 @@ export default function Select({
               style={{ backgroundColor: selectedOption.color }}
             />
           )}
-          <span className={`block max-w-full truncate ${selectedOption ? 'text-gray-900' : 'text-gray-400'}`}>
+          <span className={selectedOption ? 'text-gray-900' : 'text-gray-400'}>
             {selectedOption?.label || placeholder}
           </span>
         </span>
@@ -88,7 +88,7 @@ export default function Select({
 
       {isOpen && (
         <div className='absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden animate-fadeIn'>
-          <div className='max-h-60 overflow-y-auto overflow-x-hidden custom-scrollbar py-1'>
+          <div className='max-h-60 overflow-y-auto custom-scrollbar py-1'>
             {options.map((option) => (
               <button
                 key={option.value}
@@ -109,7 +109,7 @@ export default function Select({
                     style={{ backgroundColor: option.color }}
                   />
                 )}
-                <span className='flex-1 truncate'>{option.label}</span>
+                <span className='flex-1'>{option.label}</span>
                 {option.value === value && (
                   <svg
                     className='w-5 h-5 text-orange-600'
