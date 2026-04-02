@@ -30,15 +30,31 @@ export async function POST(req: Request) {
     }
 
     // Try to find the corresponding pipeline stage for the gym
-    const stage = await prisma.pipelineStage.findFirst({
-      where: {
-        gymId,
-        name: {
-          contains: outcome.replace('_', ' ').toLowerCase(),
-          mode: 'insensitive',
+    const targetName = outcome.replace('_', ' ').toLowerCase();
+    let stage: any = null;
+    try {
+      stage = await prisma.pipelineStage.findFirst({
+        where: {
+          gymId,
+          name: {
+            contains: targetName,
+            mode: 'insensitive' as any,
+          },
         },
-      },
-    });
+      });
+    } catch (e) {
+      // Some providers (sqlite) don't support `mode: 'insensitive'`. Fall back to fetching
+      // the stages for the gym and match case-insensitively in JS.
+      if (String((e as any)?.message || '').includes('Unknown argument `mode`')) {
+        const stages = await prisma.pipelineStage.findMany({
+          where: { gymId },
+          select: { id: true, name: true },
+        });
+        stage = stages.find((s) => (s.name || '').toLowerCase().includes(targetName)) || null;
+      } else {
+        throw e;
+      }
+    }
 
     const [log] = await prisma.$transaction([
       prisma.outreachLog.create({
