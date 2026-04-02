@@ -34,8 +34,12 @@ export async function POST(req: Request) {
       }));
 
     // Fetch existing emails and phones for this gym
-    const emails = cleaned.map((m) => m.email).filter(Boolean);
-    const phones = cleaned.map((m) => m.phone).filter(Boolean);
+    const emails = cleaned
+      .map((m) => m.email)
+      .filter((e): e is string => typeof e === 'string' && e.length > 0);
+    const phones = cleaned
+      .map((m) => m.phone)
+      .filter((p): p is string => typeof p === 'string' && p.length > 0);
     const existingMembers = await prisma.member.findMany({
       where: {
         gymId,
@@ -47,9 +51,13 @@ export async function POST(req: Request) {
       select: { email: true, phone: true },
     });
     const existingEmailSet = new Set(
-      existingMembers.map((m) => m.email && m.email.toLowerCase()),
+      existingMembers
+        .map((m) => m.email?.toLowerCase())
+        .filter((e): e is string => typeof e === 'string' && e.length > 0),
     );
-    const existingPhoneSet = new Set(existingMembers.map((m) => m.phone));
+    const existingPhoneSet = new Set(
+      existingMembers.map((m) => m.phone).filter((p): p is string => typeof p === 'string' && p.length > 0),
+    );
 
     // Track duplicates within the import batch
     const seenEmails = new Set();
