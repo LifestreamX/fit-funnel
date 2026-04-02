@@ -3,6 +3,8 @@
 //   node scripts/wipe-db.js --yes
 // This requires the project dependencies to be installed and will PERMANENTLY DELETE DATA.
 
+// Load .env.local first if present for safe local testing, then fall back to .env
+require('dotenv').config({ path: '.env.local' });
 require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -25,36 +27,54 @@ async function wipe() {
   }
 
   try {
-    console.log('Deleting MemberTag...');
-    await prisma.memberTag.deleteMany();
+    const steps = [
+      { key: 'memberTag', table: '"MemberTag"' },
+      { key: 'outreachLog', table: '"OutreachLog"' },
+      { key: 'note', table: '"Note"' },
+      { key: 'activity', table: '"Activity"' },
+      { key: 'member', table: '"Member"' },
+      { key: 'pipelineStage', table: '"PipelineStage"' },
+      { key: 'tag', table: '"Tag"' },
+      { key: 'user', table: '"User"' },
+      { key: 'gym', table: '"Gym"' },
+    ];
 
-    console.log('Deleting OutreachLog...');
-    await prisma.outreachLog.deleteMany();
-
-    console.log('Deleting Note...');
-    await prisma.note.deleteMany();
-
-    console.log('Deleting Activity...');
-    await prisma.activity.deleteMany();
-
-    console.log('Deleting Members...');
-    await prisma.member.deleteMany();
-
-    console.log('Deleting PipelineStage...');
-    await prisma.pipelineStage.deleteMany();
-
-    console.log('Deleting Tag...');
-    await prisma.tag.deleteMany();
-
-    console.log('Deleting Users...');
-    await prisma.user.deleteMany();
-
-    console.log('Deleting Gyms...');
-    await prisma.gym.deleteMany();
+    for (const step of steps) {
+      console.log(`Deleting ${step.key}...`);
+      try {
+        // If Prisma client has the model, try deleteMany
+        if (
+          prisma[step.key] &&
+          typeof prisma[step.key].deleteMany === 'function'
+        ) {
+          await prisma[step.key].deleteMany();
+          continue;
+        }
+        // Fallback to raw SQL
+        console.log(
+          `Prisma model ${step.key} not found on client, trying raw SQL delete for ${step.table}...`,
+        );
+        await prisma.$executeRawUnsafe(`DELETE FROM ${step.table}`);
+      } catch (err) {
+        console.warn(
+          `Prisma delete failed for ${step.key}:`,
+          err && err.message ? err.message : err,
+        );
+        try {
+          console.log(`Attempting raw SQL delete for ${step.table}...`);
+          await prisma.$executeRawUnsafe(`DELETE FROM ${step.table}`);
+        } catch (rawErr) {
+          console.error(
+            `Raw SQL delete also failed for ${step.table}:`,
+            rawErr && rawErr.message ? rawErr.message : rawErr,
+          );
+        }
+      }
+    }
 
     console.log('Database wipe completed.');
   } catch (err) {
-    console.error('Error wiping DB:', err);
+    console.error('Error wiping DB:', err && err.message ? err.message : err);
     process.exitCode = 1;
   } finally {
     await prisma.$disconnect();

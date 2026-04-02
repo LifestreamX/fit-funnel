@@ -10,7 +10,12 @@ async function wait(ms) {
 async function main() {
   const email = `test+${Date.now()}@example.com`;
   const password = 'Password123!';
-  const body = { gymName: 'Local Test Gym', name: 'Local Tester', email, password };
+  const body = {
+    gymName: 'Local Test Gym',
+    name: 'Local Tester',
+    email,
+    password,
+  };
 
   console.log('Registering user:', email);
   const reg = await fetch('http://localhost:3000/api/register', {
@@ -29,7 +34,12 @@ async function main() {
     console.error('User not found in DB');
     process.exit(1);
   }
-  console.log('User found. emailVerified:', user.emailVerified, 'token present:', !!user.emailVerificationToken);
+  console.log(
+    'User found. emailVerified:',
+    user.emailVerified,
+    'token present:',
+    !!user.emailVerificationToken,
+  );
 
   if (!user.emailVerificationToken) {
     console.error('No verification token present.');
@@ -37,15 +47,28 @@ async function main() {
   }
 
   console.log('Calling verify endpoint...');
-  const verify = await fetch(`http://localhost:3000/api/verify-email?token=${user.emailVerificationToken}`, {
-    method: 'GET',
-    redirect: 'manual',
-  });
-  console.log('Verify response status:', verify.status, 'location:', verify.headers.get('location'));
+  const verify = await fetch(
+    `http://localhost:3000/api/verify-email?token=${user.emailVerificationToken}`,
+    {
+      method: 'GET',
+      redirect: 'manual',
+    },
+  );
+  console.log(
+    'Verify response status:',
+    verify.status,
+    'location:',
+    verify.headers.get('location'),
+  );
 
   await wait(500);
   const verified = await prisma.user.findUnique({ where: { email } });
-  console.log('After verify - emailVerified:', verified.emailVerified, 'token:', verified.emailVerificationToken);
+  console.log(
+    'After verify - emailVerified:',
+    verified.emailVerified,
+    'token:',
+    verified.emailVerificationToken,
+  );
 
   await prisma.$disconnect();
 }

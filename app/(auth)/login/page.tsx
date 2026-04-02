@@ -16,7 +16,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (searchParams.get('registered')) {
-      setSuccess('Account created. Please check your email to verify your account.');
+      setSuccess(
+        'Account created. Please check your email to verify your account.',
+      );
     }
     if (searchParams.get('verified')) {
       setSuccess('Email verified. You can now sign in.');
