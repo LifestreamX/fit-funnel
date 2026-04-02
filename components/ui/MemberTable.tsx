@@ -96,7 +96,7 @@ export default function MemberTable({
                       }}
                       className='text-left text-xs text-gray-600 underline'
                     >
-                      📝 <span className='block max-w-[20rem] truncate'>{member.logs[0].notes}</span>
+                      📝 <span className='inline-block max-w-[20rem] truncate align-middle'>{member.logs[0].notes}</span>
                     </button>
                   </div>
                 )}
@@ -211,9 +211,9 @@ export default function MemberTable({
                               setNoteContent(member.logs![0].notes || '');
                               setNoteOpen(true);
                             }}
-                            className='block truncate text-left'
+                            className='block text-left'
                           >
-                            📝 {member.logs[0].notes}
+                            <span className='inline-block max-w-full truncate whitespace-nowrap'>📝 {member.logs[0].notes}</span>
                           </button>
                         </div>
                       )}
