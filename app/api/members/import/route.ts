@@ -40,16 +40,41 @@ export async function POST(req: Request) {
     const phones = cleaned
       .map((m) => m.phone)
       .filter((p): p is string => typeof p === 'string' && p.length > 0);
-    const existingMembers = await prisma.member.findMany({
-      where: {
-        gymId,
-        OR: [
-          { email: { in: emails, mode: 'insensitive' } },
-          { phone: { in: phones } },
-        ],
-      },
-      select: { email: true, phone: true },
-    });
+    let existingMembers: Array<{ email?: string | null; phone?: string | null }> = [];
+    try {
+      existingMembers = await prisma.member.findMany({
+        where: {
+          gymId,
+          OR: [
+            { email: { in: emails, mode: 'insensitive' as any } },
+            { phone: { in: phones } },
+          ],
+        },
+        select: { email: true, phone: true },
+      });
+    } catch (findErr) {
+      // Some providers (sqlite) don't support `mode: 'insensitive'`; fallback to separate queries
+      if (String((findErr as any)?.message || '').includes('Unknown argument `mode`')) {
+        const seen: Record<string, { email?: string | null; phone?: string | null }> = {};
+        if (emails.length > 0) {
+          const byEmail = await prisma.member.findMany({
+            where: { gymId, email: { in: emails } },
+            select: { email: true, phone: true },
+          });
+          for (const r of byEmail) seen[`${r.email ?? ''}|${r.phone ?? ''}`] = r;
+        }
+        if (phones.length > 0) {
+          const byPhone = await prisma.member.findMany({
+            where: { gymId, phone: { in: phones } },
+            select: { email: true, phone: true },
+          });
+          for (const r of byPhone) seen[`${r.email ?? ''}|${r.phone ?? ''}`] = r;
+        }
+        existingMembers = Object.values(seen);
+      } else {
+        throw findErr;
+      }
+    }
     const existingEmailSet = new Set(
       existingMembers
         .map((m) => m.email?.toLowerCase())
