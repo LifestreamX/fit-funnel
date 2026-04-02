@@ -93,7 +93,7 @@ export async function POST(req: Request) {
         html: `
           <h2>Confirm your email</h2>
           <p>Thanks for creating an account. Click the link below to verify your email address. This link expires in 24 hours.</p>
-          <a href="${process.env.INVITE_BASE_URL}/verify-email?token=${token}">Verify Email</a>
+          <a href="${process.env.INVITE_BASE_URL}/api/verify-email?token=${token}">Verify Email</a>
         `,
       });
     } catch (err) {
