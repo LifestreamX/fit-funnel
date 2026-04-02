@@ -128,18 +128,18 @@ export default function DashboardPage() {
   return (
     <AuthGuard requireRole='MANAGER'>
       <div className='space-y-6'>
-        <div className='flex items-center justify-between'>
+        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
           <h1 className='text-2xl font-bold text-gray-900'>Dashboard</h1>
-          <div className='flex gap-3'>
+          <div className='flex flex-col sm:flex-row gap-3'>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className='cursor-pointer rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50'
+              className='w-full sm:w-auto cursor-pointer rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50'
             >
               + Add Member
             </button>
             <button
               onClick={() => router.push('/import')}
-              className='cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
+              className='w-full sm:w-auto cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
             >
               Import CSV
             </button>
@@ -181,7 +181,7 @@ export default function DashboardPage() {
             )}
             <form
               onSubmit={handleAddMember}
-              className='grid grid-cols-1 gap-4 sm:grid-cols-4'
+              className='grid grid-cols-1 gap-4 md:grid-cols-2'
             >
               <input
                 type='text'
@@ -191,7 +191,7 @@ export default function DashboardPage() {
                   setNewMember({ ...newMember, firstName: e.target.value })
                 }
                 required
-                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 md:col-span-1'
               />
               <input
                 type='text'
@@ -201,7 +201,7 @@ export default function DashboardPage() {
                   setNewMember({ ...newMember, lastName: e.target.value })
                 }
                 required
-                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 md:col-span-1'
               />
               <input
                 type='email'
@@ -210,20 +210,20 @@ export default function DashboardPage() {
                 onChange={(e) =>
                   setNewMember({ ...newMember, email: e.target.value })
                 }
-                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                className='rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 md:col-span-1'
               />
-              <div className='flex gap-2'>
+              <div className='flex flex-col md:flex-row gap-2 md:col-span-1'>
                 <PhoneInput
                   value={newMember.phone}
                   onChange={(value) =>
                     setNewMember({ ...newMember, phone: value })
                   }
                   placeholder='(555) 123-4567'
-                  className='flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+                  className='w-full md:flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
                 />
                 <button
                   type='submit'
-                  className='cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
+                  className='w-full md:w-auto cursor-pointer rounded-md bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700'
                 >
                   Add
                 </button>
