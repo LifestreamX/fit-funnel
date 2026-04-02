@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Select from './Select';
 
 interface Trainer {
@@ -31,6 +32,7 @@ export default function TrainerAssignModal({
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (isOpen) {
@@ -94,7 +96,13 @@ export default function TrainerAssignModal({
               onChange={setSelectedTrainerId}
               options={[
                 { value: '', label: 'Unassigned' },
-                ...trainers.map((t) => ({ value: t.id, label: t.name })),
+                ...trainers.map((t) => ({
+                  value: t.id,
+                  label:
+                    t.id === (session?.user as any)?.id
+                      ? `${t.name} (me)`
+                      : t.name,
+                })),
               ]}
               className='mt-1 w-full'
             />
