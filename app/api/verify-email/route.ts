@@ -9,12 +9,19 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Token is required' }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: { emailVerificationToken: token },
   });
 
-  if (!user || !user.emailVerificationExpires || user.emailVerificationExpires < new Date()) {
-    return NextResponse.json({ error: 'Invalid or expired verification link' }, { status: 400 });
+  if (
+    !user ||
+    !user.emailVerificationExpires ||
+    user.emailVerificationExpires < new Date()
+  ) {
+    return NextResponse.json(
+      { error: 'Invalid or expired verification link' },
+      { status: 400 },
+    );
   }
 
   await prisma.user.update({
