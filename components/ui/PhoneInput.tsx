@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+
 interface PhoneInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -16,13 +18,9 @@ export default function PhoneInput({
   className = '',
 }: PhoneInputProps) {
   const formatPhoneNumber = (input: string) => {
-    // Remove all non-numeric characters
     const numbers = input.replace(/\D/g, '');
-
-    // Limit to 10 digits
     const limited = numbers.slice(0, 10);
 
-    // Format as (XXX) XXX-XXXX
     if (limited.length <= 3) {
       return limited;
     } else if (limited.length <= 6) {
@@ -32,19 +30,28 @@ export default function PhoneInput({
     }
   };
 
+  const [display, setDisplay] = useState(() => formatPhoneNumber(value || ''));
+
+  useEffect(() => {
+    setDisplay(formatPhoneNumber(value || ''));
+  }, [value]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(e.target.value);
+    setDisplay(formatted);
     onChange(formatted);
   };
 
   return (
     <input
       type='tel'
-      value={value}
+      value={display}
       onChange={handleChange}
       placeholder={placeholder}
       required={required}
       className={className}
+      inputMode='tel'
+      aria-label='phone'
     />
   );
 }

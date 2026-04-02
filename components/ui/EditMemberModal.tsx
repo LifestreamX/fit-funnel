@@ -44,6 +44,10 @@ export default function EditMemberModal({
     setError('');
 
     try {
+      const normalized = phone ? phone.replace(/\D/g, '') : null;
+      const phoneToSend =
+        normalized && normalized.length > 0 ? normalized : null;
+
       const res = await fetch(`/api/members/${member.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -51,7 +55,7 @@ export default function EditMemberModal({
           firstName,
           lastName,
           email: email || null,
-          phone: phone || null,
+          phone: phoneToSend,
         }),
       });
 
