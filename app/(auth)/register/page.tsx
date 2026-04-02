@@ -45,18 +45,8 @@ export default function RegisterPage() {
         return;
       }
 
-      // Auto sign in after registration
-      const signInResult = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (signInResult?.error) {
-        router.push('/login');
-      } else {
-        router.push('/dashboard');
-      }
+      // After registration, redirect user to the login page (do not auto-sign-in)
+      router.push('/login');
     } catch {
       setError('Something went wrong');
       setLoading(false);
