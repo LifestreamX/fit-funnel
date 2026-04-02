@@ -254,7 +254,7 @@ export default function ProspectsPage() {
         )}
 
         {/* Filters */}
-        <div className='flex gap-4'>
+        <div className='flex flex-col md:flex-row gap-3 md:gap-4'>
           <Select
             value={statusFilter}
             onChange={setStatusFilter}
@@ -265,7 +265,7 @@ export default function ProspectsPage() {
                 label,
               })),
             ]}
-            className='min-w-40'
+            className='w-full md:min-w-[160px]'
           />
           <Select
             value={tagFilter}
@@ -274,7 +274,7 @@ export default function ProspectsPage() {
               { value: '', label: 'All Tags' },
               ...availableTags.map((t) => ({ value: t.id, label: t.name })),
             ]}
-            className='min-w-40'
+            className='w-full md:min-w-[160px]'
           />
           {isManager && (
             <Select
@@ -288,7 +288,7 @@ export default function ProspectsPage() {
                   label: trainer.name,
                 })),
               ]}
-              className='min-w-40'
+              className='w-full md:min-w-[160px]'
             />
           )}
         </div>
