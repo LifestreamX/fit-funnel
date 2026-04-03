@@ -79,8 +79,26 @@ export default function DashboardPage() {
 
   const fetchData = () => {
     fetch('/api/dashboard')
-      .then((r) => r.json())
-      .then(setStats);
+      .then(async (r) => {
+        if (!r.ok) {
+          const txt = await r.text().catch(() => null);
+          console.error('/api/dashboard fetch failed', r.status, txt);
+          return null;
+        }
+        const txt = await r.text().catch(() => null);
+        if (!txt) return null;
+        try {
+          return JSON.parse(txt);
+        } catch (err) {
+          console.error('Failed to parse /api/dashboard JSON', err, txt);
+          return null;
+        }
+      })
+      .then((data) => setStats(data))
+      .catch((err) => {
+        console.error('Unexpected error fetching /api/dashboard', err);
+        setStats(null);
+      });
     fetchMembers();
     fetch('/api/trainers')
       .then(async (r) => {
