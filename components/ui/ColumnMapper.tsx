@@ -42,7 +42,10 @@ export default function ColumnMapper({
               onChange={(val) => onMappingChange(field.key, val)}
               options={[
                 { value: '', label: '— Select column —' },
-                ...csvHeaders.map((header) => ({ value: header, label: header })),
+                ...csvHeaders.map((header) => ({
+                  value: header,
+                  label: header,
+                })),
               ]}
               className='w-full md:flex-1'
             />

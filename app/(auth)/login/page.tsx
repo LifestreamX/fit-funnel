@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -15,12 +15,12 @@ function LoginForm() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (searchParams.get('registered')) {
+    if (searchParams?.get('registered')) {
       setSuccess(
         'Account created. Please check your email to verify your account.',
       );
     }
-    if (searchParams.get('verified')) {
+    if (searchParams?.get('verified')) {
       setSuccess('Email verified. You can now sign in.');
     }
   }, [searchParams]);
@@ -30,14 +30,15 @@ function LoginForm() {
     setLoading(true);
     setError('');
 
-    const result = await signIn('credentials', {
+    const result: any = await signIn('credentials', {
       email,
       password,
       redirect: false,
     });
 
     if (result?.error) {
-      if (result.error === 'EmailNotVerified') {
+      const err = String(result.error || '');
+      if (err.includes('EmailNotVerified')) {
         setError('Please verify your email before signing in.');
       } else {
         setError('Invalid email or password');
@@ -46,16 +47,94 @@ function LoginForm() {
       return;
     }
 
-    // Fetch session to determine role-based redirect
-    const res = await fetch('/api/auth/session');
-    const session = await res.json();
+    try {
+      const res = await fetch('/api/auth/session');
+      const session = await res.json();
 
-    if (session?.user?.role === 'MANAGER') {
-      router.push('/dashboard');
-    } else {
-      router.push('/prospects');
+      if (session?.user?.role === 'MANAGER') {
+        router.push('/dashboard');
+      } else {
+        router.push('/prospects');
+      }
+    } catch (err) {
+      setError('Signed in, but could not determine redirect.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  return (
+    <>
+      {success && (
+        <div className='mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-700'>
+          {success}
+        </div>
+      )}
+
+      {error && (
+        <div className='mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700'>
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className='space-y-5'>
+        <div>
+          <label className='block text-sm font-medium text-gray-700'>
+            Email
+          </label>
+          <input
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+            placeholder='you@example.com'
+          />
+        </div>
+
+        <div>
+          <div className='flex items-center justify-between'>
+            <label className='block text-sm font-medium text-gray-700'>
+              Password
+            </label>
+            <Link
+              href='/forgot-password'
+              className='text-xs font-medium text-orange-600 hover:text-orange-500'
+            >
+              Forgot password?
+            </Link>
+          </div>
+          <input
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+            placeholder='••••••••'
+          />
+        </div>
+
+        <button
+          type='submit'
+          disabled={loading}
+          className='w-full cursor-pointer rounded-lg bg-orange-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-orange-700 disabled:opacity-50'
+        >
+          {loading ? 'Signing in...' : 'Sign In'}
+        </button>
+      </form>
+
+      <p className='mt-4 text-center text-sm text-gray-500'>
+        New gym?{' '}
+        <Link
+          href='/register'
+          className='font-medium text-orange-600 hover:text-orange-500'
+        >
+          Register here
+        </Link>
+      </p>
+    </>
+  );
+}
 
 function LoginPageContent() {
   return (
@@ -87,4 +166,3 @@ export default function LoginPage() {
     </Suspense>
   );
 }
-                required

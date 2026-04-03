@@ -294,7 +294,7 @@ export default function ImportPage() {
 
         {/* Step 3: Confirm & Import */}
         {step === 'confirm' && !result && (
-            <div className='rounded-lg border border-gray-200 bg-white p-6 space-y-4'>
+          <div className='rounded-lg border border-gray-200 bg-white p-6 space-y-4'>
             <h3 className='text-lg font-medium text-gray-900'>
               Ready to Import
             </h3>
