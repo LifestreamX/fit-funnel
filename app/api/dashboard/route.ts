@@ -12,7 +12,10 @@ export async function GET() {
 
     const gymId = (session.user as any).gymId;
     if (!gymId) {
-      return NextResponse.json({ error: 'No gym associated with user' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'No gym associated with user' },
+        { status: 400 },
+      );
     }
 
     // Bypass Prisma type check completely using a raw query or any to avoid Vercel build failures
@@ -32,13 +35,17 @@ export async function GET() {
       booked: members.filter((m) => m.status === 'ORIENTATION_BOOKED').length,
       converted: members.filter((m) => m.status === 'CONVERTED').length,
       noAnswer: members.filter((m) => m.status === 'NO_ANSWER').length,
-      notInterested: members.filter((m) => m.status === 'NOT_INTERESTED').length,
+      notInterested: members.filter((m) => m.status === 'NOT_INTERESTED')
+        .length,
       notContacted: members.filter((m) => m.status === 'NOT_CONTACTED').length,
     };
 
     return NextResponse.json(stats);
   } catch (err: any) {
     console.error('Error in /api/dashboard GET:', err?.message ?? err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    );
   }
 }

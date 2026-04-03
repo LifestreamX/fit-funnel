@@ -4,45 +4,60 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const gymId = (session.user as any).gymId;
-  const role = (session.user as any).role;
-
-  const where: any = { gymId };
-  if (role === 'TRAINER') {
-    where.assignedToId = (session.user as any).id;
-  }
-
   try {
-    const url = new URL(req.url);
-    const tagId = url.searchParams.get('tagId');
-    if (tagId) {
-      where.tags = { some: { tagId } };
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-  } catch (err) {
-    // ignore URL parsing errors
-  }
 
-  const members = await prisma.member.findMany({
-    where,
-    include: {
-      assignedTo: { select: { id: true, name: true, email: true } },
-      createdBy: { select: { id: true, name: true } },
-      tags: { include: { tag: true } },
-      logs: {
-        orderBy: { createdAt: 'desc' },
-        take: 1,
-        include: { trainer: { select: { id: true, name: true } } },
+    const gymId = (session.user as any).gymId;
+    const role = (session.user as any).role;
+
+    if (!gymId) {
+      return NextResponse.json(
+        { error: 'No gym associated with user' },
+        { status: 400 },
+      );
+    }
+
+    const where: any = { gymId };
+    if (role === 'TRAINER') {
+      where.assignedToId = (session.user as any).id;
+    }
+
+    try {
+      const url = new URL(req.url);
+      const tagId = url.searchParams.get('tagId');
+      if (tagId) {
+        where.tags = { some: { tagId } };
+      }
+    } catch (err) {
+      // ignore URL parsing errors
+    }
+
+    const members = await prisma.member.findMany({
+      where,
+      include: {
+        assignedTo: { select: { id: true, name: true, email: true } },
+        createdBy: { select: { id: true, name: true } },
+        tags: { include: { tag: true } },
+        logs: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          include: { trainer: { select: { id: true, name: true } } },
+        },
       },
-    },
-    orderBy: { updatedAt: 'desc' },
-  });
+      orderBy: { updatedAt: 'desc' },
+    });
 
-  return NextResponse.json(members);
+    return NextResponse.json(members);
+  } catch (err: any) {
+    console.error('Error in /api/members GET:', err?.message ?? err);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(req: Request) {

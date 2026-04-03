@@ -12,7 +12,10 @@ export async function GET() {
 
     const gymId = (session.user as any).gymId;
     if (!gymId) {
-      return NextResponse.json({ error: 'No gym associated with user' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'No gym associated with user' },
+        { status: 400 },
+      );
     }
 
     const trainers = await prisma.user.findMany({
@@ -59,6 +62,9 @@ export async function GET() {
   } catch (err: any) {
     // Log server-side for debugging, but always return JSON
     console.error('Error in /api/trainers GET:', err?.message ?? err);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    );
   }
 }

@@ -76,15 +76,34 @@ export default function ProspectsPage() {
   const fetchMembers = (tagId?: string) => {
     const q = tagId ? `?tagId=${encodeURIComponent(tagId)}` : '';
     fetch(`/api/members${q}`)
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) {
+          const txt = await r.text().catch(() => null);
+          console.error('/api/members fetch failed', r.status, txt);
+          return [];
+        }
+        const txt = await r.text().catch(() => null);
+        if (!txt) return [];
+        try {
+          return JSON.parse(txt);
+        } catch (err) {
+          console.error('Failed to parse /api/members JSON', err, txt);
+          return [];
+        }
+      })
       .then((data) => {
+        const arr = Array.isArray(data) ? data : [];
         // Ensure createdBy is always present (null if missing)
         setMembers(
-          data.map((m: any) => ({
+          arr.map((m: any) => ({
             ...m,
             createdBy: m.createdBy ?? null,
           })),
         );
+      })
+      .catch((err) => {
+        console.error('Unexpected error fetching /api/members', err);
+        setMembers([]);
       });
   };
 
