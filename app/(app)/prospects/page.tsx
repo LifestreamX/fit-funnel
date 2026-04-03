@@ -91,8 +91,26 @@ export default function ProspectsPage() {
   const fetchTrainers = () => {
     if (isManager) {
       fetch('/api/trainers')
-        .then((r) => r.json())
-        .then(setTrainers);
+        .then(async (r) => {
+          if (!r.ok) {
+            const txt = await r.text().catch(() => null);
+            console.error('/api/trainers fetch failed', r.status, txt);
+            return [];
+          }
+          const txt = await r.text().catch(() => null);
+          if (!txt) return [];
+          try {
+            return JSON.parse(txt);
+          } catch (err) {
+            console.error('Failed to parse /api/trainers JSON', err, txt);
+            return [];
+          }
+        })
+        .then(setTrainers)
+        .catch((err) => {
+          console.error('Unexpected error fetching /api/trainers', err);
+          setTrainers([]);
+        });
     }
   };
 
