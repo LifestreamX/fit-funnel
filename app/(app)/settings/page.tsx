@@ -314,8 +314,8 @@ export default function SettingsPage() {
             <h2 className='text-lg font-semibold text-gray-900 mb-4'>
               Add New Stage
             </h2>
-            <div className='flex gap-4 items-end'>
-              <div className='flex-1'>
+            <div className='flex flex-col md:flex-row gap-4 items-end'>
+              <div className='w-full md:flex-1'>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>
                   Stage Name
                 </label>
@@ -327,7 +327,7 @@ export default function SettingsPage() {
                   className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent'
                 />
               </div>
-              <div>
+              <div className='w-full md:w-48'>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>
                   Color
                 </label>
@@ -338,15 +338,17 @@ export default function SettingsPage() {
                     value: color.value,
                     label: color.name,
                   }))}
-                  className='w-full'
+                  className='w-full md:w-48'
                 />
               </div>
-              <button
-                onClick={addStage}
-                className='px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium'
-              >
-                Add Stage
-              </button>
+              <div className='w-full md:w-auto'>
+                <button
+                  onClick={addStage}
+                  className='w-full md:w-auto px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium'
+                >
+                  Add Stage
+                </button>
+              </div>
             </div>
           </div>
 
@@ -358,9 +360,9 @@ export default function SettingsPage() {
               {stages.map((stage, index) => (
                 <div
                   key={stage.id}
-                  className='flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
+                  className='flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
                 >
-                  <div className='flex items-center gap-4'>
+                  <div className='flex items-center gap-4 flex-wrap md:flex-nowrap min-w-0'>
                     <div className='flex flex-col gap-1'>
                       <button
                         onClick={() => moveStage(index, 'up')}
@@ -387,7 +389,7 @@ export default function SettingsPage() {
                       onChange={(e) =>
                         updateStage(stage.id, { name: e.target.value })
                       }
-                      className='font-medium text-gray-900 border-0 focus:outline-none focus:ring-2 focus:ring-orange-500 rounded px-2 py-1'
+                      className='font-medium text-gray-900 border-0 focus:outline-none focus:ring-2 focus:ring-orange-500 rounded px-2 py-1 flex-1 min-w-0'
                     />
                     {stage.isDefault && (
                       <span className='text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded'>
@@ -395,16 +397,18 @@ export default function SettingsPage() {
                       </span>
                     )}
                   </div>
-                  <div className='flex items-center gap-3'>
-                    <Select
-                      value={stage.color}
-                      onChange={(val) => updateStage(stage.id, { color: val })}
-                      options={colorOptions.map((color) => ({
-                        value: color.value,
-                        label: color.name,
-                      }))}
-                      className='min-w-30'
-                    />
+                  <div className='flex items-center gap-3 mt-3 md:mt-0 w-full md:w-auto'>
+                    <div className='w-full md:w-36'>
+                      <Select
+                        value={stage.color}
+                        onChange={(val) => updateStage(stage.id, { color: val })}
+                        options={colorOptions.map((color) => ({
+                          value: color.value,
+                          label: color.name,
+                        }))}
+                        className='w-full md:w-36'
+                      />
+                    </div>
                     <button
                       onClick={() => deleteStage(stage.id, stage.name)}
                       className='px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium'
