@@ -29,8 +29,11 @@ export default function ColumnMapper({
 
       <div className='space-y-3'>
         {requiredFields.map((field) => (
-          <div key={field.key} className='flex items-center gap-4'>
-            <label className='w-32 text-sm font-medium text-gray-700'>
+          <div
+            key={field.key}
+            className='flex flex-col md:flex-row md:items-center gap-2'
+          >
+            <label className='w-full md:w-32 text-sm font-medium text-gray-700 mb-1 md:mb-0'>
               {field.label}
               {field.required && <span className='text-red-500'> *</span>}
             </label>
@@ -39,12 +42,9 @@ export default function ColumnMapper({
               onChange={(val) => onMappingChange(field.key, val)}
               options={[
                 { value: '', label: '— Select column —' },
-                ...csvHeaders.map((header) => ({
-                  value: header,
-                  label: header,
-                })),
+                ...csvHeaders.map((header) => ({ value: header, label: header })),
               ]}
-              className='flex-1'
+              className='w-full md:flex-1'
             />
           </div>
         ))}

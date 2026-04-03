@@ -179,7 +179,7 @@ export default function ImportPage() {
         </div>
 
         {/* Step Indicator */}
-        <div className='flex items-center gap-4'>
+        <div className='flex flex-wrap items-center gap-4'>
           {['Upload CSV', 'Map Columns', 'Confirm & Import'].map(
             (label, idx) => {
               const stepIdx = ['upload', 'map', 'confirm'].indexOf(step);
@@ -203,7 +203,9 @@ export default function ImportPage() {
                   >
                     {label}
                   </span>
-                  {idx < 2 && <div className='mx-2 h-px w-12 bg-gray-300' />}
+                  {idx < 2 && (
+                    <div className='hidden sm:block mx-2 h-px w-12 bg-gray-300' />
+                  )}
                 </div>
               );
             },
@@ -224,7 +226,7 @@ export default function ImportPage() {
           <div className='space-y-6'>
             {/* Preview */}
             <div className='rounded-lg border border-gray-200 bg-white p-6'>
-              <div className='flex items-center justify-between'>
+              <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2'>
                 <h3 className='text-lg font-medium text-gray-900 mb-4'>
                   CSV Preview {showAllPreview ? '(all rows)' : '(first 5 rows)'}
                 </h3>
@@ -282,7 +284,7 @@ export default function ImportPage() {
             <div className='flex justify-end'>
               <button
                 onClick={handleConfirm}
-                className='cursor-pointer rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700'
+                className='w-full sm:w-auto cursor-pointer rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700'
               >
                 Next: Confirm
               </button>
@@ -292,7 +294,7 @@ export default function ImportPage() {
 
         {/* Step 3: Confirm & Import */}
         {step === 'confirm' && !result && (
-          <div className='rounded-lg border border-gray-200 bg-white p-6 space-y-4'>
+            <div className='rounded-lg border border-gray-200 bg-white p-6 space-y-4'>
             <h3 className='text-lg font-medium text-gray-900'>
               Ready to Import
             </h3>
@@ -300,17 +302,17 @@ export default function ImportPage() {
               <strong>{validRows.length}</strong> valid rows will be imported
               out of <strong>{csvData.length}</strong> total rows.
             </p>
-            <div className='flex gap-3'>
+            <div className='flex flex-col sm:flex-row gap-3'>
               <button
                 onClick={() => setStep('map')}
-                className='cursor-pointer rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
+                className='w-full sm:w-auto cursor-pointer rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
               >
                 Back
               </button>
               <button
                 onClick={handleImport}
                 disabled={loading}
-                className='cursor-pointer rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700 disabled:opacity-50'
+                className='w-full sm:w-auto cursor-pointer rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700 disabled:opacity-50'
               >
                 {loading ? 'Importing...' : 'Import Members'}
               </button>
@@ -326,7 +328,7 @@ export default function ImportPage() {
             </p>
             <button
               onClick={() => router.push('/dashboard')}
-              className='mt-4 cursor-pointer rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700'
+              className='w-full sm:w-auto mt-4 cursor-pointer rounded-md bg-orange-600 px-6 py-2 text-sm font-medium text-white hover:bg-orange-700'
             >
               Go to Dashboard
             </button>
