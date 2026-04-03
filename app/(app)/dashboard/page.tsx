@@ -250,7 +250,7 @@ export default function DashboardPage() {
                 label,
               })),
             ]}
-            className='min-w-40'
+            className='w-full md:min-w-[160px]'
           />
           <Select
             value={trainerFilter}
@@ -259,7 +259,7 @@ export default function DashboardPage() {
               { value: '', label: 'All Trainers' },
               ...trainers.map((t) => ({ value: t.id, label: t.name })),
             ]}
-            className='min-w-40'
+            className='w-full md:min-w-[160px]'
           />
 
           <div className='w-full md:w-64'>
