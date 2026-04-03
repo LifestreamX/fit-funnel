@@ -401,7 +401,9 @@ export default function SettingsPage() {
                     <div className='w-full md:w-36'>
                       <Select
                         value={stage.color}
-                        onChange={(val) => updateStage(stage.id, { color: val })}
+                        onChange={(val) =>
+                          updateStage(stage.id, { color: val })
+                        }
                         options={colorOptions.map((color) => ({
                           value: color.value,
                           label: color.name,

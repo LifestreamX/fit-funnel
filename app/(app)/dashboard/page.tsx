@@ -47,6 +47,7 @@ export default function DashboardPage() {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [statusFilter, setStatusFilter] = useState('');
   const [trainerFilter, setTrainerFilter] = useState('');
+  const [nameFilter, setNameFilter] = useState('');
   const [assignModal, setAssignModal] = useState<{
     open: boolean;
     member: Member | null;
@@ -93,6 +94,11 @@ export default function DashboardPage() {
   const filteredMembers = members.filter((m) => {
     if (statusFilter && m.status !== statusFilter) return false;
     if (trainerFilter && m.assignedTo?.id !== trainerFilter) return false;
+    if (nameFilter) {
+      const q = nameFilter.trim().toLowerCase();
+      const fullName = `${m.firstName || ''} ${m.lastName || ''}`.toLowerCase();
+      if (!fullName.includes(q)) return false;
+    }
     return true;
   });
 
@@ -233,7 +239,7 @@ export default function DashboardPage() {
         )}
 
         {/* Filters */}
-        <div className='flex gap-4'>
+        <div className='flex flex-col md:flex-row gap-4 items-center'>
           <Select
             value={statusFilter}
             onChange={setStatusFilter}
@@ -255,6 +261,16 @@ export default function DashboardPage() {
             ]}
             className='min-w-40'
           />
+
+          <div className='w-full md:w-64'>
+            <input
+              type='text'
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+              placeholder='Search name...'
+              className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+            />
+          </div>
         </div>
 
         {/* Member Table */}

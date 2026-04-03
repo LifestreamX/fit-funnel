@@ -35,6 +35,7 @@ export default function ProspectsPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [trainerFilter, setTrainerFilter] = useState('');
   const [tagFilter, setTagFilter] = useState('');
+  const [nameFilter, setNameFilter] = useState('');
   const [availableTags, setAvailableTags] = useState<
     { id: string; name: string }[]
   >([]);
@@ -126,6 +127,11 @@ export default function ProspectsPage() {
       if (trainerFilter === 'unassigned' && m.assignedTo !== null) return false;
       if (trainerFilter !== 'unassigned' && m.assignedTo?.id !== trainerFilter)
         return false;
+    }
+    if (nameFilter) {
+      const q = nameFilter.trim().toLowerCase();
+      const fullName = `${m.firstName || ''} ${m.lastName || ''}`.toLowerCase();
+      if (!fullName.includes(q)) return false;
     }
     return true;
   });
@@ -261,7 +267,7 @@ export default function ProspectsPage() {
         )}
 
         {/* Filters */}
-        <div className='flex flex-col md:flex-row gap-3 md:gap-4'>
+        <div className='flex flex-col md:flex-row gap-3 md:gap-4 items-center'>
           <Select
             value={statusFilter}
             onChange={setStatusFilter}
@@ -298,6 +304,16 @@ export default function ProspectsPage() {
               className='w-full md:min-w-[160px]'
             />
           )}
+
+          <div className='w-full md:w-64'>
+            <input
+              type='text'
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+              placeholder='Search name...'
+              className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500'
+            />
+          </div>
         </div>
 
         {/* Member Table */}
