@@ -36,8 +36,9 @@ export async function GET() {
     // Add the manager (current user) to the trainers list for assignment
     const manager = {
       id: (session.user as any).id,
-      name: (session.user as any).name || 'You (Manager)',
+      name: (session.user as any).name || 'You',
       email: (session.user as any).email,
+      role: 'MANAGER' as const,
       inviteToken: null,
       inviteExpires: null,
       createdAt: null,
@@ -50,6 +51,7 @@ export async function GET() {
         id: trainer.id,
         name: trainer.name,
         email: trainer.email,
+        role: 'role' in trainer ? trainer.role : 'TRAINER',
         isPending: !!trainer.inviteToken,
         createdAt: trainer.createdAt,
         stats: {

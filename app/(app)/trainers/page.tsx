@@ -9,6 +9,7 @@ interface TrainerData {
   id: string;
   name: string;
   email: string;
+  role: 'MANAGER' | 'TRAINER';
   isPending: boolean;
   createdAt: string;
   stats: {
@@ -105,32 +106,60 @@ export default function TrainersPage() {
                 >
                   <div className='flex items-start justify-between mb-3'>
                     <div className='flex-1'>
-                      <h3 className='text-lg font-semibold text-gray-900'>
-                        {trainer.name}
-                      </h3>
+                      <div className='flex items-center gap-2'>
+                        <h3 className='text-lg font-semibold text-gray-900'>
+                          {trainer.name}
+                        </h3>
+                        {trainer.role === 'MANAGER' && (
+                          <span className='px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded'>
+                            Owner
+                          </span>
+                        )}
+                      </div>
                       <p className='text-sm text-gray-500 mt-1'>
                         {trainer.email}
                       </p>
                     </div>
-                    <button
-                      onClick={() => setDeleteModal({ isOpen: true, trainer })}
-                      className='ml-2 cursor-pointer rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors'
-                      title='Remove trainer'
-                    >
-                      <svg
-                        className='h-5 w-5'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        stroke='currentColor'
+                    {trainer.role !== 'MANAGER' ? (
+                      <button
+                        onClick={() => setDeleteModal({ isOpen: true, trainer })}
+                        className='ml-2 cursor-pointer rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors'
+                        title='Remove trainer'
                       >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          className='h-5 w-5'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          stroke='currentColor'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth={2}
+                            d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                          />
+                        </svg>
+                      </button>
+                    ) : (
+                      <div 
+                        className='ml-2 rounded-lg p-2 text-gray-300 cursor-not-allowed'
+                        title='Cannot delete account owner'
+                      >
+                        <svg
+                          className='h-5 w-5'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          stroke='currentColor'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth={2}
+                            d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+                          />
+                        </svg>
+                      </div>
+                    )}
                   </div>
                   <div className='mt-4 grid grid-cols-2 gap-3'>
                     <div className='rounded-lg bg-gray-50 p-3 text-center'>

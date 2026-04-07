@@ -24,6 +24,14 @@ export async function DELETE(
     const { id } = await params;
     const gymId = user.gymId;
 
+    // Prevent manager from deleting themselves
+    if (id === user.id) {
+      return NextResponse.json(
+        { error: 'Cannot delete the account owner' },
+        { status: 403 },
+      );
+    }
+
     // Verify the trainer belongs to this gym
     const trainer = await prisma.user.findFirst({
       where: { id, gymId, role: 'TRAINER' },
