@@ -393,71 +393,71 @@ export default function SettingsPage() {
               Pipeline Stages
             </h2>
             <div className='space-y-3'>
-              {Array.isArray(stages) && stages.length > 0 ? (
-                stages.map((stage, index) => (
-                <div
-                  key={stage.id}
-                  className='flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
-                >
-                  <div className='flex items-center gap-4 flex-wrap md:flex-nowrap min-w-0'>
-                    <div className='flex flex-col gap-1'>
-                      <button
-                        onClick={() => moveStage(index, 'up')}
-                        disabled={index === 0}
-                        className='text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed'
-                      >
-                        ▲
-                      </button>
-                      <button
-                        onClick={() => moveStage(index, 'down')}
-                        disabled={index === stages.length - 1}
-                        className='text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed'
-                      >
-                        ▼
-                      </button>
-                    </div>
+              {Array.isArray(stages) && stages.length > 0
+                ? stages.map((stage, index) => (
                     <div
-                      className='w-4 h-4 rounded-full'
-                      style={{ backgroundColor: stage.color }}
-                    />
-                    <input
-                      type='text'
-                      value={stage.name}
-                      onChange={(e) =>
-                        updateStage(stage.id, { name: e.target.value })
-                      }
-                      className='font-medium text-gray-900 border-0 focus:outline-none focus:ring-2 focus:ring-orange-500 rounded px-2 py-1 flex-1 min-w-0'
-                    />
-                    {stage.isDefault && (
-                      <span className='text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded'>
-                        Default
-                      </span>
-                    )}
-                  </div>
-                  <div className='flex items-center gap-3 mt-3 md:mt-0 w-full md:w-auto'>
-                    <div className='w-full md:w-36'>
-                      <Select
-                        value={stage.color}
-                        onChange={(val) =>
-                          updateStage(stage.id, { color: val })
-                        }
-                        options={colorOptions.map((color) => ({
-                          value: color.value,
-                          label: color.name,
-                        }))}
-                        className='w-full md:w-36'
-                      />
-                    </div>
-                    <button
-                      onClick={() => deleteStage(stage.id, stage.name)}
-                      className='px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium'
+                      key={stage.id}
+                      className='flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
                     >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))
-              ) : null}
+                      <div className='flex items-center gap-4 flex-wrap md:flex-nowrap min-w-0'>
+                        <div className='flex flex-col gap-1'>
+                          <button
+                            onClick={() => moveStage(index, 'up')}
+                            disabled={index === 0}
+                            className='text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed'
+                          >
+                            ▲
+                          </button>
+                          <button
+                            onClick={() => moveStage(index, 'down')}
+                            disabled={index === stages.length - 1}
+                            className='text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed'
+                          >
+                            ▼
+                          </button>
+                        </div>
+                        <div
+                          className='w-4 h-4 rounded-full'
+                          style={{ backgroundColor: stage.color }}
+                        />
+                        <input
+                          type='text'
+                          value={stage.name}
+                          onChange={(e) =>
+                            updateStage(stage.id, { name: e.target.value })
+                          }
+                          className='font-medium text-gray-900 border-0 focus:outline-none focus:ring-2 focus:ring-orange-500 rounded px-2 py-1 flex-1 min-w-0'
+                        />
+                        {stage.isDefault && (
+                          <span className='text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded'>
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <div className='flex items-center gap-3 mt-3 md:mt-0 w-full md:w-auto'>
+                        <div className='w-full md:w-36'>
+                          <Select
+                            value={stage.color}
+                            onChange={(val) =>
+                              updateStage(stage.id, { color: val })
+                            }
+                            options={colorOptions.map((color) => ({
+                              value: color.value,
+                              label: color.name,
+                            }))}
+                            className='w-full md:w-36'
+                          />
+                        </div>
+                        <button
+                          onClick={() => deleteStage(stage.id, stage.name)}
+                          className='px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium'
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                : null}
               {(!Array.isArray(stages) || stages.length === 0) && (
                 <p className='text-gray-500 text-center py-8'>
                   No pipeline stages yet. Add your first stage above!
@@ -514,33 +514,33 @@ export default function SettingsPage() {
           <div className='bg-white rounded-lg border border-gray-200 p-6'>
             <h2 className='text-lg font-semibold text-gray-900 mb-4'>Tags</h2>
             <div className='grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
-              {Array.isArray(tags) && tags.length > 0 ? (
-                tags.map((tag) => (
-                <div
-                  key={tag.id}
-                  className='flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
-                >
-                  <div className='flex items-center gap-3'>
+              {Array.isArray(tags) && tags.length > 0
+                ? tags.map((tag) => (
                     <div
-                      className='w-3 h-3 rounded-full'
-                      style={{ backgroundColor: tag.color }}
-                    />
-                    <span className='font-medium text-gray-900'>
-                      {tag.name}
-                    </span>
-                    <span className='text-xs text-gray-500'>
-                      ({tag._count?.members || 0})
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => deleteTag(tag.id, tag.name)}
-                    className='text-red-600 hover:bg-red-50 p-1 rounded transition-colors text-sm'
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))
-              ) : null}
+                      key={tag.id}
+                      className='flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
+                    >
+                      <div className='flex items-center gap-3'>
+                        <div
+                          className='w-3 h-3 rounded-full'
+                          style={{ backgroundColor: tag.color }}
+                        />
+                        <span className='font-medium text-gray-900'>
+                          {tag.name}
+                        </span>
+                        <span className='text-xs text-gray-500'>
+                          ({tag._count?.members || 0})
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => deleteTag(tag.id, tag.name)}
+                        className='text-red-600 hover:bg-red-50 p-1 rounded transition-colors text-sm'
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))
+                : null}
               {(!Array.isArray(tags) || tags.length === 0) && (
                 <p className='text-gray-500 text-center py-8 col-span-full'>
                   No tags yet. Add your first tag above!
