@@ -11,7 +11,7 @@ interface SessionUser {
 
 export async function DELETE(
   req: Request,
-  context: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
   const user = session?.user as SessionUser | undefined;
@@ -21,7 +21,7 @@ export async function DELETE(
   }
 
   try {
-    const { id } = await context.params;
+    const { id } = await params;
     const gymId = user.gymId;
 
     // Verify the trainer belongs to this gym

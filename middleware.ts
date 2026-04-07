@@ -10,5 +10,6 @@ export const config = {
     '/prospects/:path*',
     '/import/:path*',
     '/trainers/:path*',
+    '/settings/:path*',
   ],
 };

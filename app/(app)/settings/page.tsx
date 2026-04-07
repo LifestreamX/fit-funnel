@@ -64,12 +64,48 @@ export default function SettingsPage() {
         fetch('/api/settings/pipeline'),
         fetch('/api/settings/tags'),
       ]);
-      const stagesData = await stagesRes.json();
-      const tagsData = await tagsRes.json();
-      setStages(stagesData);
-      setTags(tagsData);
-    } catch {
+
+      const parseSafe = async (res: Response) => {
+        const text = await res.text();
+        try {
+          return text ? JSON.parse(text) : null;
+        } catch {
+          return null;
+        }
+      };
+
+      let stagesData: any = [];
+      let tagsData: any = [];
+
+      if (stagesRes.ok) {
+        const parsed = await parseSafe(stagesRes);
+        stagesData = Array.isArray(parsed) ? parsed : [];
+      } else {
+        const err = (await parseSafe(stagesRes)) || {};
+        setError(err.error || `Failed to load pipeline (${stagesRes.status})`);
+      }
+
+      if (tagsRes.ok) {
+        const parsed = await parseSafe(tagsRes);
+        tagsData = Array.isArray(parsed) ? parsed : [];
+      } else {
+        const err = (await parseSafe(tagsRes)) || {};
+        setError(err.error || `Failed to load tags (${tagsRes.status})`);
+      }
+
+      // Ensure we always set arrays to prevent map errors
+      setStages(Array.isArray(stagesData) ? stagesData : []);
+      setTags(Array.isArray(tagsData) ? tagsData : []);
+    } catch (e) {
+      // Log error for debugging and show generic message
+      // so client doesn't crash when server returns non-array or HTML
+      // (e.g., 404 page or auth redirect)
+      // eslint-disable-next-line no-console
+      console.error('fetchData error', e);
       setError('Failed to load settings');
+      // Set empty arrays on error to prevent map errors
+      setStages([]);
+      setTags([]);
     } finally {
       setLoading(false);
     }
@@ -357,7 +393,8 @@ export default function SettingsPage() {
               Pipeline Stages
             </h2>
             <div className='space-y-3'>
-              {stages.map((stage, index) => (
+              {Array.isArray(stages) && stages.length > 0 ? (
+                stages.map((stage, index) => (
                 <div
                   key={stage.id}
                   className='flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
@@ -419,8 +456,9 @@ export default function SettingsPage() {
                     </button>
                   </div>
                 </div>
-              ))}
-              {stages.length === 0 && (
+              ))
+              ) : null}
+              {(!Array.isArray(stages) || stages.length === 0) && (
                 <p className='text-gray-500 text-center py-8'>
                   No pipeline stages yet. Add your first stage above!
                 </p>
@@ -476,7 +514,8 @@ export default function SettingsPage() {
           <div className='bg-white rounded-lg border border-gray-200 p-6'>
             <h2 className='text-lg font-semibold text-gray-900 mb-4'>Tags</h2>
             <div className='grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
-              {tags.map((tag) => (
+              {Array.isArray(tags) && tags.length > 0 ? (
+                tags.map((tag) => (
                 <div
                   key={tag.id}
                   className='flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors'
@@ -500,8 +539,9 @@ export default function SettingsPage() {
                     ✕
                   </button>
                 </div>
-              ))}
-              {tags.length === 0 && (
+              ))
+              ) : null}
+              {(!Array.isArray(tags) || tags.length === 0) && (
                 <p className='text-gray-500 text-center py-8 col-span-full'>
                   No tags yet. Add your first tag above!
                 </p>
