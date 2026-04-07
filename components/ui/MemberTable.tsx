@@ -114,7 +114,7 @@ export default function MemberTable({
                   member.tags.map((mt) => (
                     <span
                       key={mt.tag.id}
-                      className='inline-flex items-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white'
+                      className='inline-flex items-center justify-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white text-center'
                       style={{ background: mt.tag.color }}
                     >
                       {mt.tag.name}
@@ -233,7 +233,7 @@ export default function MemberTable({
                         member.tags.map((mt) => (
                           <span
                             key={mt.tag.id}
-                            className='inline-flex items-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white'
+                            className='inline-flex items-center justify-center gap-2 rounded-full px-2 py-0.5 text-xs font-medium text-white text-center'
                             style={{ background: mt.tag.color }}
                           >
                             {mt.tag.name}

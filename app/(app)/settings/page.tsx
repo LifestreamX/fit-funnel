@@ -123,7 +123,6 @@ export default function SettingsPage() {
         body: JSON.stringify({
           name: newStageName,
           color: newStageColor,
-          order: stages.length,
           isDefault: stages.length === 0, // First stage is default
         }),
       });

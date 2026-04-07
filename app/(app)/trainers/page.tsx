@@ -122,7 +122,9 @@ export default function TrainersPage() {
                     </div>
                     {trainer.role !== 'MANAGER' ? (
                       <button
-                        onClick={() => setDeleteModal({ isOpen: true, trainer })}
+                        onClick={() =>
+                          setDeleteModal({ isOpen: true, trainer })
+                        }
                         className='ml-2 cursor-pointer rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors'
                         title='Remove trainer'
                       >
@@ -141,7 +143,7 @@ export default function TrainersPage() {
                         </svg>
                       </button>
                     ) : (
-                      <div 
+                      <div
                         className='ml-2 rounded-lg p-2 text-gray-300 cursor-not-allowed'
                         title='Cannot delete account owner'
                       >

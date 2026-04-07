@@ -57,11 +57,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { name, color, order, isDefault } = await req.json();
+    const { name, color, isDefault } = await req.json();
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
     }
+
+    // Get the next available order number
+    const existingStages = await prisma.pipelineStage.findMany({
+      where: { gymId: user.gymId },
+      orderBy: { order: 'desc' },
+      take: 1,
+    });
+    const nextOrder = existingStages.length > 0 ? existingStages[0].order + 1 : 0;
 
     // If this is set as default, unset other defaults
     if (isDefault) {
@@ -75,7 +83,7 @@ export async function POST(req: Request) {
       data: {
         name,
         color: color || '#6B7280',
-        order: order ?? 0,
+        order: nextOrder,
         isDefault: isDefault || false,
         gymId: user.gymId,
       },
